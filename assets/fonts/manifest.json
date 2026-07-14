@@ -1,0 +1,45 @@
+[
+ {
+  "file": "dmserif-italic-400.woff2",
+  "family": "DM Serif Display",
+  "style": "italic",
+  "weights": [
+   "400"
+  ]
+ },
+ {
+  "file": "dmserif-normal-400.woff2",
+  "family": "DM Serif Display",
+  "style": "normal",
+  "weights": [
+   "400"
+  ]
+ },
+ {
+  "file": "inter-normal-400.woff2",
+  "family": "Inter",
+  "style": "normal",
+  "weights": [
+   "400",
+   "500",
+   "600",
+   "700"
+  ]
+ },
+ {
+  "file": "spacemono-normal-400.woff2",
+  "family": "Space Mono",
+  "style": "normal",
+  "weights": [
+   "400"
+  ]
+ },
+ {
+  "file": "spacemono-normal-700.woff2",
+  "family": "Space Mono",
+  "style": "normal",
+  "weights": [
+   "700"
+  ]
+ }
+]
