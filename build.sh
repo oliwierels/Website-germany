@@ -21,18 +21,40 @@ cat > "$OUT" <<'HTML_HEAD'
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ludwig II. von Robotollern — Der König unter den Robotern</title>
-<meta name="description" content="Ludwig II. von Robotollern — humanoider Event-Roboter (Unitree G1) mit königlichem Auftritt, professionell betreut. Einsätze ab 2.500 € zzgl. USt. Deutschland, Österreich, Schweiz.">
+<title>Humanoiden Roboter mieten für Events, Messen & Konferenzen | Ludwig II. von Robotollern</title>
+<meta name="description" content="Humanoider Event-Roboter (Unitree G1) mit Operator für Messen, Konferenzen & Firmenevents — deutschlandweit mieten. Versichert, Deutsch & Englisch, ab 2.500 € zzgl. USt.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="canonical" href="https://robotollern.de/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://robotollern.de/">
-<meta property="og:title" content="Ludwig II. von Robotollern — Der König unter den Robotern">
-<meta property="og:description" content="Humanoider Event-Roboter mit königlichem Auftritt — Events, Marken-Kooperationen, Content. Einsätze ab 2.500 € zzgl. USt.">
+<meta property="og:site_name" content="Ludwig II. von Robotollern">
+<meta property="og:title" content="Humanoiden Roboter mieten für Events, Messen & Konferenzen">
+<meta property="og:description" content="Humanoider Event-Roboter mit königlichem Auftritt — Messen, Konferenzen, Firmenevents. Operator inklusive, versichert, deutschlandweit. Ab 2.500 € zzgl. USt.">
 <meta property="og:image" content="https://robotollern.de/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ludwig II. von Robotollern — humanoider Event-Roboter mit Krone und rotem Umhang">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Humanoiden Roboter mieten für Events, Messen & Konferenzen">
+<meta name="twitter:description" content="Humanoider Event-Roboter mit Operator — Messen, Konferenzen, Firmenevents. Deutschlandweit, versichert, ab 2.500 € zzgl. USt.">
 <meta name="twitter:image" content="https://robotollern.de/og.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","@id":"https://robotollern.de/#org","name":"Robotollern","alternateName":"Ludwig II. von Robotollern","legalName":"GERA – Maksym Herasymenko","url":"https://robotollern.de/","logo":"https://robotollern.de/og.jpg","email":"info@robotollern.de","address":{"@type":"PostalAddress","streetAddress":"Welserstraße 3","postalCode":"87463","addressLocality":"Dietmannsried","addressCountry":"DE"},"sameAs":["https://www.instagram.com/robotollern","https://www.tiktok.com/@robotollern","https://www.youtube.com/@LudwigIIvonRobottollern","https://www.threads.com/@robotollern","https://www.facebook.com/share/1BYhCKFLCV/","https://x.com/robotollern"]},
+{"@type":"WebSite","@id":"https://robotollern.de/#website","url":"https://robotollern.de/","name":"Ludwig II. von Robotollern","inLanguage":"de-DE","publisher":{"@id":"https://robotollern.de/#org"}},
+{"@type":"Service","@id":"https://robotollern.de/#service","name":"Humanoiden Roboter mieten — Event-Roboter mit Operator","serviceType":"Vermietung humanoider Roboter für Events, Messen und Konferenzen","provider":{"@id":"https://robotollern.de/#org"},"areaServed":[{"@type":"Country","name":"Deutschland"},{"@type":"Country","name":"Österreich"},{"@type":"Country","name":"Schweiz"}],"offers":{"@type":"Offer","priceCurrency":"EUR","price":"2500","priceSpecification":{"@type":"PriceSpecification","minPrice":"2500","priceCurrency":"EUR"},"availability":"https://schema.org/InStock","url":"https://robotollern.de/#contact"}},
+{"@type":"FAQPage","@id":"https://robotollern.de/#faq","mainEntity":[
+{"@type":"Question","name":"Was kann Ludwig auf einem Event?","acceptedAnswer":{"@type":"Answer","text":"Ludwig begrüßt Gäste, bewegt sich frei durch den Raum, interagiert mit dem Publikum und sorgt für Foto- und Videomomente, die geteilt werden. Er wird immer von einem professionellen Operator begleitet."}},
+{"@type":"Question","name":"Was kostet ein Auftritt?","acceptedAnswer":{"@type":"Answer","text":"Einsätze beginnen ab 2.500 € zzgl. USt. — der Startpreis für ein kompaktes Format (ab ca. 2 Stunden). Der konkrete Preis hängt von Format, Dauer, Programm und Individualisierung ab; Sie erhalten immer ein individuelles Angebot."}},
+{"@type":"Question","name":"Für welche Anlässe kann man Ludwig buchen?","acceptedAnswer":{"@type":"Answer","text":"Store- und Showroom-Eröffnungen, Messen und Konferenzen, Firmenfeiern, Produktpräsentationen, Presse-Events, Premium-Hochzeiten — und Marken-Kooperationen im Content-Bereich."}},
+{"@type":"Question","name":"In welchen Städten und Ländern seid ihr verfügbar?","acceptedAnswer":{"@type":"Answer","text":"Deutschland, Österreich und die Schweiz — Anfahrt und Logistik werden im Angebot individuell berücksichtigt. Weitere Länder und Sprachen sind auf Anfrage möglich."}},
+{"@type":"Question","name":"Wie weit im Voraus muss ich buchen?","acceptedAnswer":{"@type":"Answer","text":"Je früher, desto besser — beliebte Termine (Wochenenden, Messezeiten) sind schnell vergeben. Fragen Sie am besten 2–4 Wochen im Voraus an; kurzfristige Anfragen versuchen wir möglich zu machen."}},
+{"@type":"Question","name":"Ist das sicher für die Gäste?","acceptedAnswer":{"@type":"Answer","text":"Ja. Ludwig wird durchgehend von einem erfahrenen Operator begleitet und gesteuert; Ablauf und Sicherheitskonzept werden vorab mit Ihnen geplant. Der Betrieb ist versichert."}}
+]}
+]}
+</script>
 <style>
 /* Schriftarten lokal gehostet (kein Google Fonts — DSGVO) */
 HTML_HEAD

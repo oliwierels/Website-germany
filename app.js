@@ -524,6 +524,13 @@
     var navCol = h('nav', { class: 'foot-col', 'aria-label': t.navLabel },
       h('span', { class: 'foot-col__h' }, t.navLabel), t.nav.map(function (p) { return h('a', { href: p[0] }, p[1]); }));
 
+    /* SEO: Einsatzorte-Spalte — interne Links auf die Stadt-Landingpages + Blog */
+    var citiesCol = t.cities ? h('nav', { class: 'foot-col', 'aria-label': t.citiesLabel },
+      h('span', { class: 'foot-col__h' }, t.citiesLabel),
+      t.cities.map(function (p) { return h('a', { href: p[0] }, p[1]); }),
+      h('a', { href: t.citiesAll[0], style: { color: 'var(--ember-300)' } }, t.citiesAll[1]),
+      h('a', { href: t.blogLink[0], style: { color: 'var(--ember-300)' } }, t.blogLink[1])) : null;
+
     var legalCol = h('div', { class: 'foot-col' }, h('span', { class: 'foot-col__h' }, t.legalLabel));
     t.legal.forEach(function (p) { legalCol.appendChild(h('button', { type: 'button', class: 'foot-legalbtn', on: { click: function () { openLegal(p[0]); } } }, p[1])); });
     legalCol.appendChild(h('button', { type: 'button', class: 'foot-legalbtn', on: { click: openCookieSettings } }, t.cookies));
@@ -536,7 +543,7 @@
         h('div', { class: 'foot-ai' },
           h('span', { class: 'badge-live' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), t.ai),
           h('p', null, t.aiBody)),
-        h('div', { class: 'foot-grid' }, brand, navCol, legalCol),
+        h('div', { class: 'foot-grid' }, brand, navCol, citiesCol, legalCol),
         h('p', { class: 'foot-b2b' }, t.b2b),
         h('div', { class: 'foot-base' },
           h('span', null, '© ' + year + ' ' + (cfg.legal.publicBrand || 'GERA') + ' · ' + t.rights),
@@ -718,8 +725,8 @@
     document.documentElement.lang = state.lang;
     var skip = document.querySelector('.skip-link'); if (skip) skip.textContent = C().skip;
     document.title = state.lang === 'de'
-      ? 'Ludwig II. von Robotollern — Der König unter den Robotern'
-      : 'Ludwig II von Robotollern — The king among robots';
+      ? 'Humanoiden Roboter mieten für Events, Messen & Konferenzen | Ludwig II. von Robotollern'
+      : 'Rent a humanoid robot for events, trade fairs & conferences | Ludwig II von Robotollern';
     lucide();
     setupReveal(); setupSpy();
   }
