@@ -26,6 +26,9 @@ cat > "$OUT" <<'HTML_HEAD'
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="canonical" href="https://robotollern.de/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="Robotollern Blog — Event-Roboter Ratgeber" href="https://robotollern.de/feed.xml">
 <link rel="preconnect" href="https://crm.robotollern.de">
 <meta property="og:type" content="website">

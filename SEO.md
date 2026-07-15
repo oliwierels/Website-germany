@@ -1,12 +1,24 @@
 # SEO — robotollern.de
 
-Stan po fazie 3 (2026-07-15). Co jest zrobione w kodzie i co trzeba zrobić
+Stan po fazie 4 (2026-07-15). Co jest zrobione w kodzie i co trzeba zrobić
 ręcznie poza repozytorium, żeby ruch i pozycje realnie urosły.
 
 ## Co jest zrobione (on-page / techniczne)
 
-- **62 podstrony SEO**: hub miast, 40 stron miast (DE/AT/CH), 9 stron usług,
-  strona cen `/preise/`, blog (hub + 10 artykułów), strona 404.
+- **65 podstron SEO**: hub miast, 40 stron miast (DE/AT/CH), 9 stron usług,
+  strona cen `/preise/`, strona modelu `/unitree-g1-mieten/`, blog
+  (hub + 12 artykułów, w tym szerokie frazy „Firmenjubiläum Ideen"
+  i „Sommerfest Firma Ideen"), strona 404.
+- **Redesign podstron**: animowana aurora w hero, gradientowe akcenty
+  złoto-ember, scroll-reveal (z poszanowaniem `prefers-reduced-motion`),
+  hover-glow na kartach, glassmorphism nav. CSS wstrzykiwany inline —
+  zero render-blokujących requestów (lepszy LCP/CWV).
+- **Favicona**: korona (SVG + PNG 96/180 + ico) — Google pokazuje ją
+  przy wynikach; source: `favicon.svg`, render: Chromium.
+- **IndexNow**: klucz `772212e1d9a668f8bc5a040cf9d4b810` (plik w rootcie).
+  Po każdym deployu pingnij:
+  `curl "https://api.indexnow.org/indexnow?url=https://robotollern.de/&key=772212e1d9a668f8bc5a040cf9d4b810"`
+  — Bing/Copilot/Seznam indeksują zmiany w minuty.
 - **Meta komplet na każdej stronie**: title/description w limitach SERP,
   canonical, pełny Open Graph (z wymiarami i altem obrazka), Twitter Cards,
   `og:type=article` + daty publikacji dla wpisów blogowych.

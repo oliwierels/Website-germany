@@ -9,7 +9,7 @@
    Aufruf:  node tools/seo/generate.mjs   (aus dem Repo-Root)
    Quelldaten: tools/seo/cities.mjs, tools/seo/blog.mjs
    ============================================================ */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CITIES } from './cities.mjs';
@@ -28,6 +28,9 @@ const cityBySlug = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
 const wikiUrl = (name) => 'https://de.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/ /g, '_'));
 const wordCount = (html) => String(html).replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length;
 const OG_IMG = { url: `${SITE}/og.jpg`, w: 1200, h: 630, alt: 'Ludwig II. von Robotollern — humanoider Event-Roboter mit Krone und rotem Umhang' };
+/* CSS wird inline eingebettet: eine Request weniger, schnellerer LCP.
+   Quelle bleibt assets/seo.css (wird weiterhin mit deployt, z. B. für 404-Fallbacks). */
+const INLINE_CSS = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'assets', 'seo.css'), 'utf8');
 
 /* ---------- shared building blocks ---------- */
 
@@ -77,6 +80,7 @@ function footer() {
         <ul>
           <li><a href="/#contact">Anfrage &amp; Buchung</a></li>
           <li><a href="/preise/">Preise &amp; Pakete</a></li>
+          <li><a href="/unitree-g1-mieten/">Unitree G1 mieten</a></li>
           <li><a href="/roboter-show/">Roboter-Show buchen</a></li>
           <li><a href="/roboter-hochzeit/">Roboter für Hochzeiten</a></li>
           <li><a href="/#faq">Häufige Fragen</a></li>
@@ -139,6 +143,22 @@ function leadForm(source, cityName) {
 </section>`;
 }
 
+/* Scroll-Reveal: rein progressive — ohne JS/bei Reduced Motion bleibt alles sichtbar. */
+const REVEAL_JS = `
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var els = document.querySelectorAll('.card, .step, .faq details, .check li, .postcard, .section .intro');
+  els.forEach(function (el, i) { el.classList.add('will-reveal'); el.style.transitionDelay = (i % 6) * 55 + 'ms'; });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px' });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>`;
+
 const LEAD_JS = `
 <script>
 document.querySelectorAll('.lead-form').forEach(function (f) {
@@ -187,7 +207,9 @@ function page({ path, title, desc, ogTitle, jsonld, body, ogType = 'website', ar
 <meta name="description" content="${esc(desc)}">
 <meta name="robots" content="${noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <meta name="theme-color" content="#0A0A0A">
-${noindex ? '' : `<link rel="canonical" href="${SITE}${path}">\n`}<link rel="stylesheet" href="/assets/seo.css">
+${noindex ? '' : `<link rel="canonical" href="${SITE}${path}">\n`}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="Robotollern Blog — Event-Roboter Ratgeber" href="${SITE}/feed.xml">
 <link rel="preconnect" href="https://crm.robotollern.de">
 <meta property="og:type" content="${ogType}">
@@ -199,13 +221,17 @@ ${noindex ? '' : `<link rel="canonical" href="${SITE}${path}">\n`}<link rel="sty
 <meta property="og:image:width" content="${OG_IMG.w}">
 <meta property="og:image:height" content="${OG_IMG.h}">
 <meta property="og:image:alt" content="${esc(OG_IMG.alt)}">
-<meta property="og:locale" content="de_DE">${articleMeta}
+<meta property="og:locale" content="de_DE">
+<meta property="og:locale:alternate" content="de_AT">
+<meta property="og:locale:alternate" content="de_CH">${articleMeta}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(ogTitle || title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${OG_IMG.url}">
 <meta name="twitter:image:alt" content="${esc(OG_IMG.alt)}">
 <script type="application/ld+json">${JSON.stringify(graph)}</script>
+<style>
+${INLINE_CSS}</style>
 </head>
 <body>
 ${NAV}
@@ -214,6 +240,7 @@ ${body}
 </main>
 ${footer()}
 ${LEAD_JS}
+${REVEAL_JS}
 <script src="https://crm.robotollern.de/widget.js" defer></script>
 </body>
 </html>
@@ -372,7 +399,7 @@ ${crumbsHtml([['Start', '/'], ['Roboter mieten', '/roboter-mieten/'], [c.name, n
     <p class="kicker">Ablauf</p>
     <h2>So funktioniert die Buchung</h2>
     <div class="steps">
-      ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+      ${STEPS.map((s) => `<div class="step" data-n="${s.n}"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
     </div>
   </div>
 </section>
@@ -544,7 +571,7 @@ ${crumbsHtml([['Start', '/'], [u.kicker, null]])}
     <h2>Vom Erstkontakt zum Auftritt</h2>
     <div class="intro"><p>${esc(u.body)}</p></div>
     <div class="steps">
-      ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+      ${STEPS.map((s) => `<div class="step" data-n="${s.n}"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
     </div>
     <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Das konkrete Angebot richtet sich nach Format, Dauer und Ort — Operator, Anreise, Technik und Versicherung inklusive. Alle Details: <a href="/preise/">Preise &amp; Pakete</a>.</small></p>
   </div>
@@ -692,7 +719,7 @@ ${crumbsHtml([['Start', '/'], ['Preise', null]])}
     <p class="kicker">Ablauf</p>
     <h2>Vom Budget zum Angebot in drei Schritten</h2>
     <div class="steps">
-      ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+      ${STEPS.map((s) => `<div class="step" data-n="${s.n}"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
     </div>
     ${costPost ? `<p class="intro">Tiefer einsteigen? Der Ratgeber <a href="/blog/${costPost.slug}/">${esc(costPost.title)}</a> erklärt alle Kostenpunkte im Detail.</p>` : ''}
   </div>
@@ -734,6 +761,135 @@ ${crumbsHtml([['Start', '/'], ['Preise', null]])}
 </section>
 
 ${leadForm('seo-preise', null)}
+${ctaBand(null, true)}`;
+  return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
+}
+
+/* ---------- Unitree G1 model page (/unitree-g1-mieten/) ---------- */
+
+function unitreePage() {
+  const path = '/unitree-g1-mieten/';
+  const title = 'Unitree G1 mieten — mit Operator, Show-Charakter & Versicherung';
+  const desc = 'Unitree G1 mieten für Messen & Events: der humanoide Roboter als Ludwig II. — mit Operator, versichert, Deutsch & Englisch. Ab 2.500 € zzgl. USt. Jetzt anfragen!';
+  const faq = [
+    { q: 'Kann man einen Unitree G1 in Deutschland mieten?', a: 'Ja — bei Robotollern mieten Sie den Unitree G1 als betreuten Auftritt: Roboter im königlichen Ornat, geschulter Operator, Anreise, Sicherheitskonzept und versicherter Betrieb. Einsätze ab 2.500 € zzgl. USt., deutschlandweit sowie in Österreich und der Schweiz.' },
+    { q: 'Wie groß ist der Unitree G1?', a: 'Rund 1,30 m — groß genug für Bühnenpräsenz, kompakt genug für sichere Interaktion im Publikum und den Einsatz auf normalen Messeständen.' },
+    { q: 'Läuft der G1 wirklich frei auf zwei Beinen?', a: 'Ja. Der G1 geht dynamisch, dreht sich, balanciert und zeigt Show-Bewegungen — durchgehend begleitet und gesteuert von einem erfahrenen Operator.' },
+    { q: 'Wie lange hält der Akku bei einem Event?', a: '1,5–2 Stunden aktiver Betrieb; der Wechsel dauert nur Minuten und wird bei längeren Events als kurze Programmpause eingeplant.' },
+    { q: 'Warum mieten statt kaufen?', a: 'Ein G1 kostet in der Anschaffung einen mittleren fünfstelligen Betrag — plus Software, Schulung, Wartung, Versicherung und ein Team für den Betrieb. Die Miete liefert den fertigen Auftritt mit Charakter, Operator und Versicherung zum planbaren Preis pro Einsatz.' },
+    { q: 'Spricht der Roboter mit den Gästen?', a: 'Ja — KI-gesteuert, live auf Deutsch und Englisch, immer im Charakter des Königs. Die Kennzeichnung erfolgt gemäß EU AI Act (Art. 50): Gäste wissen, dass sie mit einer KI sprechen.' },
+  ];
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE}${path}#service`,
+        name: 'Unitree G1 mieten — humanoider Event-Roboter mit Operator',
+        serviceType: 'Vermietung humanoider Roboter (Unitree G1) für Events, Messen und Konferenzen',
+        provider: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'Robotollern', url: `${SITE}/`, email: EMAIL },
+        areaServed: [{ '@type': 'Country', name: 'Deutschland' }, { '@type': 'Country', name: 'Österreich' }, { '@type': 'Country', name: 'Schweiz' }],
+        image: `${SITE}/assets/robots/walk.webp`,
+        url: `${SITE}${path}`,
+        offers: {
+          '@type': 'Offer', priceCurrency: 'EUR', price: '2500',
+          priceSpecification: { '@type': 'PriceSpecification', minPrice: '2500', priceCurrency: 'EUR', valueAddedTaxIncluded: false },
+          availability: 'https://schema.org/InStock', url: `${SITE}${path}#anfrage`,
+        },
+      },
+      faqLd(faq),
+      breadcrumbLd([['Start', '/'], ['Unitree G1 mieten', null]]),
+    ],
+  };
+  const g1Post = POSTS.find((p) => p.slug === 'unitree-g1-event-einsatz');
+  const related = ['unitree-g1-event-einsatz', 'humanoiden-roboter-mieten-kosten', 'roboter-vs-klassische-showacts']
+    .map((s) => POSTS.find((p) => p.slug === s)).filter(Boolean);
+  const topCities = CITIES.slice(0, 8);
+  const body = `
+${crumbsHtml([['Start', '/'], ['Unitree G1 mieten', null]])}
+<header class="hero">
+  <div class="container hero__grid">
+    <div>
+      <p class="kicker">Die Plattform · Unitree G1</p>
+      <h1><em>Unitree G1</em> mieten — als König, nicht als Karton</h1>
+      <p class="lead">Der Unitree G1 gehört zu den fortschrittlichsten humanoiden Robotern, die kommerziell verfügbar sind. Bei Robotollern mieten Sie ihn nicht als nackte Technik, sondern als fertigen Auftritt: Ludwig II. — mit Charakter, Operator, Sicherheitskonzept und Versicherung.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#anfrage">G1 für Ihr Event anfragen</a>
+        <a class="btn btn--ghost" href="#faq">Häufige Fragen</a>
+      </div>
+      <ul class="chips">
+        <li>Ca. 1,30 m · zweibeinig</li><li>Deutsch &amp; English</li><li>Operator inklusive</li><li>Ab 2.500 € zzgl. USt.</li>
+      </ul>
+    </div>
+    <div class="hero__img">
+      <img src="/assets/robots/walk.webp" width="640" height="960" alt="Unitree G1 mieten — humanoider Roboter Ludwig II. von Robotollern läuft frei" fetchpriority="high">
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Technik im Überblick</p>
+    <h2>Was der Unitree G1 auf Ihrem Event leistet</h2>
+    <div class="cards">
+      <div class="card"><h3>Freies Gehen</h3><p>Dynamisch auf zwei Beinen: gehen, drehen, balancieren, Show-Moves — kein Roboter auf Rollen, sondern ein Auftritt, der lebendig wirkt.</p></div>
+      <div class="card"><h3>Live-Interaktion</h3><p>KI-gesteuerte Gespräche auf Deutsch und Englisch — Begrüßung, Fragen, Komplimente, immer im Charakter des Königs. Gekennzeichnet gemäß EU AI Act.</p></div>
+      <div class="card"><h3>Foto- &amp; Video-Momente</h3><p>Posiert mit Gästen, winkt in Kameras und liefert die Clips, die Ihr Event viral machen.</p></div>
+      <div class="card"><h3>Ca. 1,30 m Größe</h3><p>Groß genug für Bühnenpräsenz, kompakt genug für sichere Interaktion im Publikum und normale Messestände.</p></div>
+      <div class="card"><h3>1,5–2 Std. Akku</h3><p>Aktiver Betrieb pro Ladung; Wechsel in Minuten — bei längeren Events als kurze Programmpause eingeplant.</p></div>
+      <div class="card"><h3>Sicher &amp; versichert</h3><p>Erfahrener Operator, Sicherheitskonzept für Ihre Fläche, versicherter Betrieb — Betriebsgrundlage, keine Nebensache.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Der Unterschied</p>
+    <h2>Nackte Hardware mieten — oder einen Auftritt buchen?</h2>
+    <div class="intro"><p>Einen G1 „im Karton“ zu mieten bringt Ihrem Event nichts: Ohne Charakter, Drehbuch und geschulten Operator steht da nur Technik. Robotollern liefert das Gesamtpaket — Ludwig II. von Robotollern, den König unter den Event-Robotern: mit Krone, Umhang, königlicher Laune und einem Team, das Ablauf und Sicherheit im Griff hat. ${g1Post ? `Einen ehrlichen Blick auf Fähigkeiten und Grenzen der Plattform gibt der Ratgeber <a href="/blog/${g1Post.slug}/">${esc(g1Post.title)}</a>.` : ''}</p></div>
+    <ul class="check">
+      ${SCOPE.map((s) => `<li>${esc(s)}</li>`).join('\n      ')}
+    </ul>
+    <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Alle Details: <a href="/preise/">Preise &amp; Pakete</a>. Das konkrete Angebot richtet sich nach Format, Dauer und Ort.</small></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Ablauf</p>
+    <h2>So kommt der G1 auf Ihr Event</h2>
+    <div class="steps">
+      ${STEPS.map((s) => `<div class="step" data-n="${s.n}"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="faq">
+  <div class="container">
+    <p class="kicker">Häufige Fragen</p>
+    <h2>Unitree G1 mieten — FAQ</h2>
+    <div class="faq">
+      ${faq.map((f) => `<details><summary>${esc(f.q)}</summary><div><p>${esc(f.a)}</p></div></details>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Vertiefen</p>
+    <h2>Ratgeber zur Plattform</h2>
+    <div class="cards">
+      ${related.map((r) => `<div class="card postcard"><time datetime="${r.date}">${fmtDate(r.date)}</time><h3><a href="/blog/${r.slug}/">${esc(r.title)}</a></h3><p>${esc(r.excerpt)}</p><span class="more">Weiterlesen →</span></div>`).join('\n      ')}
+    </div>
+    <p class="kicker" style="margin-top:34px">Einsatzorte</p>
+    <div class="linkrow">
+      ${topCities.map((c) => `<a href="/roboter-mieten/${c.slug}/">Roboter mieten in ${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle 40 Einsatzorte →</a>
+    </div>
+  </div>
+</section>
+
+${leadForm('seo-unitree-g1', null)}
 ${ctaBand(null, true)}`;
   return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
 }
@@ -845,6 +1001,7 @@ function sitemap() {
     { loc: '/', pri: '1.0', freq: 'weekly', img: '/og.jpg', imgTitle: 'Humanoiden Roboter mieten — Ludwig II. von Robotollern' },
     { loc: '/roboter-mieten/', pri: '0.9', freq: 'weekly', img: '/assets/robots/walk.webp', imgTitle: 'Event-Roboter mieten — 40 Einsatzorte in DE, AT, CH' },
     { loc: '/preise/', pri: '0.9', freq: 'monthly', img: '/assets/robots/king.webp', imgTitle: 'Roboter mieten — Preise ab 2.500 € zzgl. USt.' },
+    { loc: '/unitree-g1-mieten/', pri: '0.9', freq: 'monthly', img: '/assets/robots/walk.webp', imgTitle: 'Unitree G1 mieten — humanoider Event-Roboter mit Operator' },
     ...USECASES.map((u) => ({ loc: `/${u.slug}/`, pri: '0.9', freq: 'monthly', img: '/assets/robots/king-wave.webp', imgTitle: u.title })),
     ...CITIES.map((c) => ({ loc: `/roboter-mieten/${c.slug}/`, pri: '0.8', freq: 'monthly', img: '/assets/robots/king.webp', imgTitle: `Roboter mieten in ${c.name}` })),
     { loc: '/blog/', pri: '0.7', freq: 'weekly' },
@@ -977,6 +1134,7 @@ const LLMS_TXT = `# Ludwig II. von Robotollern — robotollern.de
 - [Preise & Pakete — Einsätze ab 2.500 € zzgl. USt., Operator & Versicherung inklusive](${SITE}/preise/)
 
 ## Leistungen
+- [Unitree G1 mieten — humanoider Roboter mit Operator & Versicherung](${SITE}/unitree-g1-mieten/)
 ${USECASES.map((u) => `- [${u.title}](${SITE}/${u.slug}/)`).join('\n')}
 
 ## Einsatzorte
@@ -995,7 +1153,7 @@ ${POSTS.map((p) => `- [${p.title}](${SITE}/blog/${p.slug}/)`).join('\n')}
 - Zielgruppe: B2B — Messen, Konferenzen, Firmenevents, Produktlaunches, Premium-Feiern
 `;
 
-const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), pricingPage(), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
+const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), pricingPage(), unitreePage(), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
 for (const { path, html } of pages) {
   const file = join(ROOT, path, 'index.html');
   mkdirSync(dirname(file), { recursive: true });

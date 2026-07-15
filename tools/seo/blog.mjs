@@ -471,4 +471,102 @@ export const POSTS = [
       { q: 'Lohnt sich der Einsatz auch außerhalb von Messen?', a: 'Ja — auf Konferenzen (Sponsoren-Sichtbarkeit), bei Launches und Eröffnungen (Laufkundschaft) und auf Firmenevents (Employer Branding und interner Content).' },
     ],
   },
+  {
+    slug: 'firmenjubilaeum-ideen',
+    title: 'Firmenjubiläum: 10 Ideen, über die noch Jahre gesprochen wird',
+    metaDesc: 'Ideen fürs Firmenjubiläum 2026: von der Zeitreise-Ausstellung bis zum humanoiden Roboter als Überraschungsgast. 10 Konzepte mit Praxis-Tipps für Planung & Budget.',
+    date: '2026-07-15',
+    readMin: 7,
+    excerpt: '25, 50 oder 100 Jahre Firma — und jetzt? 10 Jubiläums-Ideen zwischen Tradition und Zukunft, die Mitarbeiter, Kunden und Presse wirklich erreichen.',
+    html: `
+<p>Ein Firmenjubiläum ist mehr als eine Feier — es ist die eine Gelegenheit, Mitarbeitern, Kunden und der Öffentlichkeit zu zeigen, wofür das Unternehmen steht: Herkunft <em>und</em> Zukunft. Genau an dieser Spannung scheitern viele Jubiläen — Buffet, Rede, Fotowand, vergessen. Hier sind zehn Ideen, die hängen bleiben.</p>
+
+<h2>1. Die Zeitreise-Ausstellung</h2>
+<p>Produkte, Fotos und Anekdoten aus jeder Dekade — nicht im Flur, sondern als inszenierter Rundgang mit Stationen. Wirkt doppelt, wenn am Ende die Zukunft steht (siehe Idee 2).</p>
+
+<h2>2. Der Blick nach vorn — mit einem Gast aus der Zukunft</h2>
+<p>Die stärkste Dramaturgie fürs Jubiläum: Vergangenheit ehren, Zukunft zeigen. Ein <a href="/roboter-firmenfeier/">humanoider Roboter als Überraschungsgast</a> verkörpert den zweiten Teil wörtlich — er begrüßt Gäste, gratuliert dem Unternehmen im königlichen Stil und liefert die Fotos, die intern wie extern geteilt werden. Für Technik- und Industrieunternehmen ist das zugleich ein Statement: Wir spielen vorne mit. Einsätze gibt es <a href="/preise/">ab 2.500 € zzgl. USt.</a>, deutschlandweit.</p>
+
+<h2>3. Das Mitarbeiter-Museum</h2>
+<p>Nicht die Firma ausstellen, sondern die Menschen: Fundstücke, Zitate und Fotos aus der Belegschaft, kuratiert wie eine echte Ausstellung. Kostet wenig, bewegt viel.</p>
+
+<h2>4. Die Jubiläums-Dokumentation</h2>
+<p>Ein professioneller Kurzfilm — Gründergeschichte, Wendepunkte, Ausblick — der am Abend Premiere feiert und danach jahrelang im Employer Branding arbeitet.</p>
+
+<h2>5. Gastgeber statt Gastgeschenk</h2>
+<p>Statt Give-aways: Das Unternehmen lädt die Stadt ein — Tag der offenen Tür, Werksführungen, Familienprogramm. Lokalpresse inklusive, besonders in Kombination mit einem <a href="/blog/roboter-auf-messen-standmagnet/">Publikumsmagneten</a>, der Warteschlangen erzeugt.</p>
+
+<h2>6. Die Kunden-Ehrung</h2>
+<p>Die zehn längsten Kundenbeziehungen auf die Bühne holen — mit echter Geschichte statt Pokal. Bindung, die kein Rabatt erreicht.</p>
+
+<h2>7. Das Zeitkapsel-Ritual</h2>
+<p>Jede Abteilung legt einen Gegenstand hinein, geöffnet wird zum nächsten runden Jubiläum. Einfach, emotional, generationenverbindend.</p>
+
+<h2>8. Der Jubiläums-Song / das Orchester</h2>
+<p>Musik trägt Emotionen besser als jede Rede — vom Chor der Belegschaft bis zum Streichquartett beim Empfang.</p>
+
+<h2>9. Das Charity-Versprechen</h2>
+<p>Pro Jubiläumsjahr ein Betrag für ein lokales Projekt — verkündet am Abend, umgesetzt übers Jahr. Substanz statt Symbolik.</p>
+
+<h2>10. Der inszenierte Countdown</h2>
+<p>Das Jubiläumsjahr als Serie kleiner Momente (Monatsrückblicke, Interviews, Social-Serie), die auf den großen Abend zulaufen — so trägt das Jubiläum zwölf Monate weit.</p>
+
+<h2>Planung: die drei Fehler, die fast alle machen</h2>
+<ul>
+<li><strong>Zu spät starten:</strong> Gute Locations und Acts sind 6–12 Monate vorher weg; <a href="/blog/roboter-event-planen-checkliste/">Checkliste hier</a>.</li>
+<li><strong>Nur Vergangenheit:</strong> Ohne Zukunftsmoment wirkt jedes Jubiläum wie ein Abschied.</li>
+<li><strong>Kein teilbarer Moment:</strong> Was nicht fotografiert wird, ist nach einer Woche vergessen — planen Sie den einen Moment, den jeder posten will.</li>
+</ul>
+<p>Sie planen ein Jubiläum mit Zukunftsmoment? <a href="/#contact">Fragen Sie unverbindlich an</a> — der König gratuliert persönlich.</p>`,
+    faq: [
+      { q: 'Wie weit im Voraus sollte man ein Firmenjubiläum planen?', a: 'Für runde Jubiläen mit externen Gästen: 6–12 Monate. Location, Programm-Highlights und gefragte Show-Acts sind an beliebten Terminen früh ausgebucht.' },
+      { q: 'Was macht ein Firmenjubiläum unvergesslich?', a: 'Die Verbindung aus Herkunft und Zukunft plus ein teilbarer Moment: eine Überraschung, die Gäste fotografieren und posten — vom Kurzfilm-Premiere bis zum humanoiden Roboter, der dem Unternehmen gratuliert.' },
+      { q: 'Was kostet ein Roboter-Auftritt beim Jubiläum?', a: 'Einsätze beginnen ab 2.500 € zzgl. USt. für ein kompaktes Format ab ca. 2 Stunden — inklusive Operator, Anreise und versichertem Betrieb.' },
+    ],
+  },
+  {
+    slug: 'sommerfest-firma-ideen',
+    title: 'Sommerfest für die Firma: Ideen, die 2026 wirklich ziehen',
+    metaDesc: 'Sommerfest-Ideen für Firmen: Programm-Highlights von Food-Konzepten bis zum Event-Roboter, Planung, Wetter-Plan B und Budget-Tipps — der Praxis-Guide 2026.',
+    date: '2026-07-15',
+    readMin: 6,
+    excerpt: 'Grill, Hüpfburg, Bierbank — kennt jeder, begeistert niemanden mehr. Welche Sommerfest-Ideen 2026 wirklich funktionieren und wie Sie das Fest planen, das bleibt.',
+    html: `
+<p>Das Firmensommerfest ist der emotionale Höhepunkt des Arbeitsjahres — oder ein lauwarmer Pflichttermin. Der Unterschied liegt selten am Budget, sondern an einer Frage: <strong>Gibt es einen Moment, über den am Montag alle reden?</strong> Hier ist der Praxis-Guide.</p>
+
+<h2>Das Grundgerüst: was jedes gute Sommerfest braucht</h2>
+<ul>
+<li><strong>Ein Highlight mit Ansage:</strong> ein Programmpunkt, der vorher angekündigt wird und Vorfreude erzeugt.</li>
+<li><strong>Food als Erlebnis:</strong> Stationen (Grill, Streetfood, Eiswagen) statt Buffetschlange.</li>
+<li><strong>Zonen statt Bestuhlung:</strong> Aktivzone, Schattenlounge, Familienecke — Gäste wollen wählen.</li>
+<li><strong>Plan B fürs Wetter:</strong> Zelt oder Halle von Anfang an mitdenken, nicht ab der Wettervorhersage.</li>
+</ul>
+
+<h2>Programm-Ideen, sortiert nach Wirkung</h2>
+<h3>Der Überraschungsgast, der alles schlägt</h3>
+<p>Ein <a href="/event-roboter/">humanoider Event-Roboter</a>, der übers Festgelände schreitet, Mitarbeiter begrüßt und für Fotos posiert, ist 2026 der Programmpunkt mit dem höchsten „Montag-Gesprächswert“. Ludwig II. läuft frei auf zwei Beinen, spricht Deutsch und Englisch und wird durchgehend von einem Operator begleitet — <a href="/blog/unitree-g1-event-einsatz/">outdoor-tauglich nach vorheriger Prüfung</a>. Das Beste: Die Clips landen von selbst im Intranet und auf LinkedIn — Employer Branding, das nichts extra kostet.</p>
+<h3>Klassiker mit Twist</h3>
+<ul>
+<li><strong>Team-Olympiade</strong> — aber mit Disziplinen aus dem Firmenalltag (Palettenrennen, Tippen mit Handschuhen).</li>
+<li><strong>Live-Musik</strong> — lokale Band statt Playlist; der Unterschied ist jeden Euro wert.</li>
+<li><strong>Familienprogramm</strong> — wer Kinder einlädt, bekommt Loyalität der Eltern.</li>
+<li><strong>Feuer- oder Lichtshow</strong> zum Abschluss — der emotionale Schlusspunkt nach Einbruch der Dunkelheit.</li>
+</ul>
+
+<h2>Budget realistisch planen</h2>
+<p>Faustregel: Catering und Location fressen 60–70 % — das Highlight sollte trotzdem nicht der Restposten sein, denn es entscheidet über die Erinnerung. Ein Roboter-Auftritt beginnt <a href="/preise/">ab 2.500 € zzgl. USt.</a> und ersetzt DJ-Pausenprogramm, Fotobox und Eisbrecher in einem.</p>
+
+<h2>Timing &amp; Organisation</h2>
+<ul>
+<li><strong>8–12 Wochen vorher:</strong> Termin blocken (Brückentage meiden), Location und Highlight buchen.</li>
+<li><strong>4 Wochen vorher:</strong> Programm kommunizieren — Vorfreude ist der halbe Event-Erfolg.</li>
+<li><strong>1 Woche vorher:</strong> Wetter-Entscheidung, Ablaufplan mit allen Dienstleistern teilen — <a href="/blog/roboter-event-planen-checkliste/">Checkliste hier</a>.</li>
+</ul>
+<p>Sie wollen das Sommerfest, von dem noch im Winter erzählt wird? <a href="/#contact">Fragen Sie Ihren Termin an</a> — Sommertermine sind schnell vergeben.</p>`,
+    faq: [
+      { q: 'Was macht ein Firmensommerfest besonders?', a: 'Ein angekündigtes Highlight mit hohem Gesprächswert, Food-Stationen statt Buffetschlange, wählbare Zonen und ein Wetter-Plan B. Die Erinnerung entsteht am Highlight — nicht am Catering.' },
+      { q: 'Kann ein Event-Roboter draußen auftreten?', a: 'Grundsätzlich ja — Grenzen setzen starke Hitze, Regen und unebene Flächen. Outdoor-Einsätze werden vorab gemeinsam geprüft, ein Zelt- oder Hallen-Slot ist der sichere Plan B.' },
+      { q: 'Wie früh muss man das Sommerfest planen?', a: '8–12 Wochen Vorlauf sind das Minimum für Location, Catering und Programm-Highlight — beliebte Sommertermine (Juni/Juli, Donnerstage und Freitage) sind deutlich früher ausgebucht.' },
+    ],
+  },
 ];
