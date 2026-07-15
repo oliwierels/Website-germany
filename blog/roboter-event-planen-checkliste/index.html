@@ -149,11 +149,16 @@
         <li><a href="/blog/">Blog &amp; Ratgeber</a></li></ul>
       </div>
       <div>
+        <h4>Leistungen</h4>
+        <ul><li><a href="/messe-roboter/">Messen &amp; Ausstellungen</a></li><li><a href="/event-roboter/">Events &amp; Veranstaltungen</a></li><li><a href="/konferenz-roboter/">Konferenzen &amp; Kongresse</a></li><li><a href="/roboter-firmenfeier/">Firmenfeiern &amp; Jubiläen</a></li><li><a href="/roboter-weihnachtsfeier/">Weihnachtsfeiern</a></li><li><a href="/roboter-hochzeit/">Hochzeiten &amp; Premium-Feiern</a></li></ul>
+      </div>
+      <div>
         <h4>Service</h4>
         <ul>
           <li><a href="/#contact">Anfrage &amp; Buchung</a></li>
+          <li><a href="/roboter-show/">Roboter-Show buchen</a></li>
+          <li><a href="/roboter-hochzeit/">Roboter für Hochzeiten</a></li>
           <li><a href="/#faq">Häufige Fragen</a></li>
-          <li><a href="/#cases">Einsatzbereiche</a></li>
           <li><a href="/">Impressum &amp; Datenschutz</a></li>
         </ul>
       </div>
@@ -164,6 +169,22 @@
     </div>
   </div>
 </footer>
+
+<script>
+document.querySelectorAll('.lead-form').forEach(function (f) {
+  f.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (!f.reportValidity()) return;
+    try { fetch(f.dataset.endpoint, { method: 'POST', body: new FormData(f) }).catch(function () {}); } catch (e) {}
+    Array.prototype.forEach.call(f.children, function (el) {
+      if (!el.classList.contains('lead-ok')) el.style.display = 'none';
+    });
+    var ok = f.querySelector('.lead-ok');
+    ok.hidden = false; ok.focus();
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
+</script>
 <script src="https://crm.robotollern.de/widget.js" defer></script>
 </body>
 </html>

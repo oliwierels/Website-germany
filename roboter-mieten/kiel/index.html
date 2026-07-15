@@ -147,9 +147,43 @@
       <a href="/roboter-mieten/bremen/">Roboter mieten in Bremen</a>
       <a href="/roboter-mieten/">Alle Einsatzorte →</a>
     </div>
+    <p class="kicker" style="margin-top:34px">Leistungen</p>
+    <div class="linkrow">
+      <a href="/messe-roboter/">Messen &amp; Ausstellungen</a>
+      <a href="/event-roboter/">Events &amp; Veranstaltungen</a>
+      <a href="/konferenz-roboter/">Konferenzen &amp; Kongresse</a>
+      <a href="/roboter-firmenfeier/">Firmenfeiern &amp; Jubiläen</a>
+      <a href="/roboter-weihnachtsfeier/">Weihnachtsfeiern</a>
+      <a href="/roboter-hochzeit/">Hochzeiten &amp; Premium-Feiern</a>
+      <a href="/roboter-produktlaunch/">Produktlaunches &amp; Eröffnungen</a>
+      <a href="/roboter-show/">Show-Acts &amp; Entertainment</a>
+    </div>
   </div>
 </section>
 
+
+<section class="section section--alt" id="anfrage">
+  <div class="container">
+    <p class="kicker">Anfrage &amp; Buchung</p>
+    <h2>Roboter in Kiel anfragen</h2>
+    <p class="intro">Schildern Sie kurz Ihr Event — Sie erhalten zeitnah ein individuelles Angebot. Keine Warteschleifen: Das Team antwortet schnell, der KI-Assistent (Chat unten rechts) rund um die Uhr.</p>
+    <form class="lead-form" method="post" action="https://crm.robotollern.de/api/lead-form" data-endpoint="https://crm.robotollern.de/api/lead-form">
+      <input type="hidden" name="source" value="seo-stadt-kiel">
+      <div class="lead-row">
+        <label>Firma&nbsp;*<input name="company" required autocomplete="organization" placeholder="Unternehmen"></label>
+        <label>Ansprechpartner&nbsp;*<input name="name" required autocomplete="name" placeholder="Vor- und Nachname"></label>
+      </div>
+      <div class="lead-row">
+        <label>E-Mail&nbsp;*<input type="email" name="email" required autocomplete="email" placeholder="name@firma.de"></label>
+        <label>Anlass &amp; Wunschtermin&nbsp;*<input name="occasion" required placeholder="z. B. Messe-Eröffnung, 14.09."></label>
+      </div>
+      <label>Nachricht<textarea name="message" rows="4" placeholder="Ort, ungefähre Gästezahl, Besonderheiten …"></textarea></label>
+      <p class="lead-note">Mit * markierte Felder sind Pflichtfelder. Unser Angebot richtet sich an Geschäftskunden (B2B). Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben gemäß unserer <a href="/">Datenschutzerklärung</a> zu.</p>
+      <button class="btn btn--primary" type="submit">Anfrage senden</button>
+      <div class="lead-ok" hidden tabindex="-1"><strong>Anfrage eingegangen.</strong> Vielen Dank — der Hofstaat meldet sich zeitnah mit einem Angebot.</div>
+    </form>
+  </div>
+</section>
 
 <section class="cta-band" aria-label="Anfrage">
   <div class="cta-band__in">
@@ -157,7 +191,7 @@
     <h2>Bereit für eine Audienz in Kiel?</h2>
     <p>Schildern Sie Ihr Event in zwei Sätzen — Sie erhalten zeitnah ein individuelles Angebot. Einsätze ab 2.500&nbsp;€ zzgl. USt., Operator und Versicherung inklusive.</p>
     <div class="hero__cta">
-      <a class="btn btn--primary" href="/#contact">Jetzt unverbindlich anfragen</a>
+      <a class="btn btn--primary" href="#anfrage">Jetzt unverbindlich anfragen</a>
       <a class="btn btn--ghost" href="mailto:info@robotollern.de">E-Mail schreiben</a>
     </div>
   </div>
@@ -183,11 +217,16 @@
         <li><a href="/blog/">Blog &amp; Ratgeber</a></li></ul>
       </div>
       <div>
+        <h4>Leistungen</h4>
+        <ul><li><a href="/messe-roboter/">Messen &amp; Ausstellungen</a></li><li><a href="/event-roboter/">Events &amp; Veranstaltungen</a></li><li><a href="/konferenz-roboter/">Konferenzen &amp; Kongresse</a></li><li><a href="/roboter-firmenfeier/">Firmenfeiern &amp; Jubiläen</a></li><li><a href="/roboter-weihnachtsfeier/">Weihnachtsfeiern</a></li><li><a href="/roboter-hochzeit/">Hochzeiten &amp; Premium-Feiern</a></li></ul>
+      </div>
+      <div>
         <h4>Service</h4>
         <ul>
           <li><a href="/#contact">Anfrage &amp; Buchung</a></li>
+          <li><a href="/roboter-show/">Roboter-Show buchen</a></li>
+          <li><a href="/roboter-hochzeit/">Roboter für Hochzeiten</a></li>
           <li><a href="/#faq">Häufige Fragen</a></li>
-          <li><a href="/#cases">Einsatzbereiche</a></li>
           <li><a href="/">Impressum &amp; Datenschutz</a></li>
         </ul>
       </div>
@@ -198,6 +237,22 @@
     </div>
   </div>
 </footer>
+
+<script>
+document.querySelectorAll('.lead-form').forEach(function (f) {
+  f.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (!f.reportValidity()) return;
+    try { fetch(f.dataset.endpoint, { method: 'POST', body: new FormData(f) }).catch(function () {}); } catch (e) {}
+    Array.prototype.forEach.call(f.children, function (el) {
+      if (!el.classList.contains('lead-ok')) el.style.display = 'none';
+    });
+    var ok = f.querySelector('.lead-ok');
+    ok.hidden = false; ok.focus();
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
+</script>
 <script src="https://crm.robotollern.de/widget.js" defer></script>
 </body>
 </html>
