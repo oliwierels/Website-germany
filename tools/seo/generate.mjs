@@ -14,6 +14,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CITIES } from './cities.mjs';
 import { POSTS } from './blog.mjs';
+import { OCCASIONS } from './occasions.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SITE = 'https://robotollern.de';
@@ -23,6 +24,20 @@ const TODAY = '2026-07-14';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const cityBySlug = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
+const postBySlug = Object.fromEntries(POSTS.map((p) => [p.slug, p]));
+
+/* deterministische Rotation: verteilt interne Links gleichmäßig über alle Seiten */
+const rot = (arr, start, n) => Array.from({ length: Math.min(n, arr.length) }, (_, k) => arr[((start % arr.length) + arr.length + k) % arr.length]);
+
+/* Kurztitel für Footer-/Linklisten */
+const POST_SHORT = {
+  'humanoiden-roboter-mieten-kosten': 'Kosten & Preise 2026',
+  'roboter-auf-messen-standmagnet': 'Roboter auf Messen',
+  'event-roboter-ideen-konferenzen': 'Ideen für Konferenzen',
+  'unitree-g1-event-einsatz': 'Unitree G1 im Einsatz',
+  'roboter-event-planen-checkliste': 'Planungs-Checkliste',
+};
+const postShort = (p) => POST_SHORT[p.slug] || p.title;
 
 /* ---------- shared building blocks ---------- */
 
@@ -34,6 +49,7 @@ const NAV = `
     <div class="nav__links">
       <a href="/">Start</a>
       <a href="/roboter-mieten/">Einsatzorte</a>
+      <a href="/event-roboter/">Anlässe</a>
       <a href="/blog/">Blog</a>
       <a href="/#faq">FAQ</a>
       <a class="btn btn--primary btn--sm" href="/#contact">Roboter buchen</a>
@@ -41,8 +57,10 @@ const NAV = `
   </div>
 </nav>`;
 
-function footer() {
-  const top = CITIES.slice(0, 10);
+function footer(pageIdx = 0) {
+  /* Städte-Auswahl rotiert pro Seite → jede Stadt bekommt Footer-Links von
+     vielen verschiedenen Seiten (gleichmäßige interne Verlinkung). */
+  const cities = rot(CITIES, pageIdx * 3, 6);
   return `
 <footer class="footer">
   <div class="container">
@@ -54,13 +72,18 @@ function footer() {
       </div>
       <div>
         <h4>Roboter mieten in</h4>
-        <ul>${top.slice(0, 5).map((c) => `<li><a href="/roboter-mieten/${c.slug}/">${esc(c.name)}</a></li>`).join('')}
+        <ul>${cities.map((c) => `<li><a href="/roboter-mieten/${c.slug}/">${esc(c.name)}</a></li>`).join('')}
         <li><a href="/roboter-mieten/">Alle Einsatzorte →</a></li></ul>
       </div>
       <div>
-        <h4>Beliebte Städte</h4>
-        <ul>${top.slice(5, 10).map((c) => `<li><a href="/roboter-mieten/${c.slug}/">${esc(c.name)}</a></li>`).join('')}
-        <li><a href="/blog/">Blog &amp; Ratgeber</a></li></ul>
+        <h4>Nach Anlass</h4>
+        <ul>${OCCASIONS.slice(0, 6).map((o) => `<li><a href="/event-roboter/${o.slug}/">${esc(o.name)}</a></li>`).join('')}
+        <li><a href="/event-roboter/">Alle Anlässe →</a></li></ul>
+      </div>
+      <div>
+        <h4>Ratgeber</h4>
+        <ul>${POSTS.map((p) => `<li><a href="/blog/${p.slug}/">${esc(postShort(p))}</a></li>`).join('')}
+        <li><a href="/blog/">Blog &amp; Ratgeber →</a></li></ul>
       </div>
       <div>
         <h4>Service</h4>
@@ -96,7 +119,7 @@ function ctaBand(city) {
 </section>`;
 }
 
-function page({ path, title, desc, ogTitle, jsonld, body }) {
+function page({ path, title, desc, ogTitle, jsonld, body, idx = 0 }) {
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -114,8 +137,13 @@ function page({ path, title, desc, ogTitle, jsonld, body }) {
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:image" content="${SITE}/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ludwig II. von Robotollern — humanoider Event-Roboter mit Krone und rotem Umhang">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(ogTitle || title)}">
+<meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${SITE}/og.jpg">
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
 </head>
@@ -124,7 +152,7 @@ ${NAV}
 <main id="main">
 ${body}
 </main>
-${footer()}
+${footer(idx)}
 <script src="https://crm.robotollern.de/widget.js" defer></script>
 </body>
 </html>
@@ -190,12 +218,19 @@ function cityFaq(c) {
   ];
 }
 
-function cityPage(c) {
+function cityPage(c, i) {
   const path = `/roboter-mieten/${c.slug}/`;
   const title = `Roboter mieten in ${c.name} — humanoider Event-Roboter für Messen & Events`;
   const desc = `Humanoiden Roboter in ${c.name} mieten: Event-Roboter Ludwig II. (Unitree G1) für Messen, Konferenzen & Firmenevents in ${c.name}. Mit Operator, versichert, ab 2.500 € zzgl. USt.`;
   const faq = cityFaq(c);
+  /* 8 Nachbar-Links: redaktionelles nearby[] + deterministische Ring-Auffüllung,
+     damit jede Stadtseite gleichmäßig eingehende Links erhält */
   const nearby = c.nearby.map((s) => cityBySlug[s]).filter(Boolean);
+  for (const cand of rot(CITIES, i + 5, CITIES.length)) {
+    if (nearby.length >= 8) break;
+    if (cand.slug !== c.slug && !nearby.some((x) => x.slug === cand.slug)) nearby.push(cand);
+  }
+  const guides = rot(POSTS, i, 3);
 
   const jsonld = {
     '@context': 'https://schema.org',
@@ -299,6 +334,27 @@ ${crumbsHtml([['Start', '/'], ['Roboter mieten', '/roboter-mieten/'], [c.name, n
 
 <section class="section">
   <div class="container">
+    <p class="kicker">Nach Anlass</p>
+    <h2>Event-Roboter in ${esc(c.name)} — für jeden Anlass</h2>
+    <div class="linkrow">
+      ${OCCASIONS.map((o) => `<a href="/event-roboter/${o.slug}/">${esc(o.linkLabel)}</a>`).join('\n      ')}
+      <a href="/event-roboter/">Alle Anlässe →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Ratgeber</p>
+    <h2>Wissen für Ihr Event in ${esc(c.name)}</h2>
+    <div class="cards">
+      ${guides.map((r) => `<div class="card postcard"><time datetime="${r.date}">${fmtDate(r.date)}</time><h3><a href="/blog/${r.slug}/">${esc(r.title)}</a></h3><p>${esc(r.excerpt)}</p><span class="more">Weiterlesen →</span></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
     <p class="kicker">Weitere Einsatzorte</p>
     <h2>Roboter mieten in der Nähe von ${esc(c.name)}</h2>
     <div class="linkrow">
@@ -310,7 +366,7 @@ ${crumbsHtml([['Start', '/'], ['Roboter mieten', '/roboter-mieten/'], [c.name, n
 
 ${ctaBand(c)}`;
 
-  return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
+  return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body, idx: i + 1 }) };
 }
 
 /* ---------- cities hub ---------- */
@@ -371,6 +427,18 @@ ${crumbsHtml([['Start', '/'], ['Roboter mieten', null]])}
   </div>
 </section>
 
+<section class="section">
+  <div class="container">
+    <p class="kicker">Nach Anlass</p>
+    <h2>Oder wählen Sie nach Anlass</h2>
+    <div class="linkrow">
+      ${OCCASIONS.map((o) => `<a href="/event-roboter/${o.slug}/">${esc(o.linkLabel)}</a>`).join('\n      ')}
+      <a href="/event-roboter/">Alle Anlässe →</a>
+      <a href="/blog/">Blog &amp; Ratgeber →</a>
+    </div>
+  </div>
+</section>
+
 ${ctaBand(null)}`;
   return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
 }
@@ -379,9 +447,10 @@ ${ctaBand(null)}`;
 
 const fmtDate = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
 
-function postPage(p, all) {
+function postPage(p, all, i = 0) {
   const path = `/blog/${p.slug}/`;
   const related = all.filter((x) => x.slug !== p.slug).slice(0, 3);
+  const linkCities = rot(CITIES, i * 7, 10);
   const jsonld = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -432,8 +501,21 @@ ${p.html}
     </div>
   </div>
 </section>
+<section class="section">
+  <div class="container">
+    <p class="kicker">Roboter mieten</p>
+    <h2>Event-Roboter für Ihren Anlass &amp; Ihre Stadt</h2>
+    <div class="linkrow">
+      ${OCCASIONS.map((o) => `<a href="/event-roboter/${o.slug}/">${esc(o.linkLabel)}</a>`).join('\n      ')}
+    </div>
+    <div class="linkrow">
+      ${linkCities.map((c) => `<a href="/roboter-mieten/${c.slug}/">Roboter mieten in ${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle Einsatzorte →</a>
+    </div>
+  </div>
+</section>
 ${ctaBand(null)}`;
-  return { path, html: page({ path, title: `${p.title} | Robotollern Blog`, ogTitle: p.title, desc: p.metaDesc, jsonld, body }) };
+  return { path, html: page({ path, title: `${p.title} | Robotollern Blog`, ogTitle: p.title, desc: p.metaDesc, jsonld, body, idx: i + 40 }) };
 }
 
 function blogHub() {
@@ -467,6 +549,211 @@ ${crumbsHtml([['Start', '/'], ['Blog', null]])}
     </div>
   </div>
 </section>
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Direkt zum Angebot</p>
+    <h2>Roboter mieten — nach Anlass oder Stadt</h2>
+    <div class="linkrow">
+      ${OCCASIONS.map((o) => `<a href="/event-roboter/${o.slug}/">${esc(o.linkLabel)}</a>`).join('\n      ')}
+      <a href="/event-roboter/">Alle Anlässe →</a>
+    </div>
+    <div class="linkrow">
+      ${CITIES.slice(0, 10).map((c) => `<a href="/roboter-mieten/${c.slug}/">${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle Einsatzorte →</a>
+    </div>
+  </div>
+</section>
+${ctaBand(null)}`;
+  return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
+}
+
+/* ---------- occasion pages (/event-roboter/<slug>/) ---------- */
+
+function occasionPage(o, i) {
+  const path = `/event-roboter/${o.slug}/`;
+  const cities = o.cities.map((s) => cityBySlug[s]).filter(Boolean);
+  const guides = o.posts.map((s) => postBySlug[s]).filter(Boolean);
+  const relatedOcc = rot(OCCASIONS, i + 1, OCCASIONS.length - 1).filter((x) => x.slug !== o.slug).slice(0, 4);
+
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE}${path}#service`,
+        name: o.title,
+        serviceType: `Vermietung humanoider Roboter — ${o.name}`,
+        provider: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'Robotollern', url: `${SITE}/`, email: EMAIL },
+        areaServed: [{ '@type': 'Country', name: 'Deutschland' }, { '@type': 'Country', name: 'Österreich' }, { '@type': 'Country', name: 'Schweiz' }],
+        url: `${SITE}${path}`,
+        offers: { '@type': 'Offer', priceCurrency: 'EUR', price: '2500', priceSpecification: { '@type': 'PriceSpecification', minPrice: '2500', priceCurrency: 'EUR' }, url: `${SITE}/#contact` },
+      },
+      faqLd(o.faq),
+      breadcrumbLd([['Start', '/'], ['Event-Roboter', '/event-roboter/'], [o.name, null]]),
+    ],
+  };
+
+  const body = `
+${crumbsHtml([['Start', '/'], ['Event-Roboter', '/event-roboter/'], [o.name, null]])}
+<header class="hero">
+  <div class="container hero__grid">
+    <div>
+      <p class="kicker">${esc(o.kicker)}</p>
+      <h1>${o.h1}</h1>
+      <p class="lead">${esc(o.intro)}</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="/#contact">Roboter buchen</a>
+        <a class="btn btn--ghost" href="#faq">Häufige Fragen</a>
+      </div>
+      <ul class="chips">
+        <li>Operator inklusive</li><li>Versichert</li><li>Deutsch &amp; English</li><li>Ab 2.500 € zzgl. USt.</li>
+      </ul>
+    </div>
+    <div class="hero__img">
+      <img src="/assets/robots/king-wave.webp" width="640" height="960" alt="Ludwig II. von Robotollern — humanoider Event-Roboter für ${esc(o.name)}" fetchpriority="high">
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">So läuft der Auftritt</p>
+    <h2>${esc(o.name)}: der Auftritt, der hängen bleibt</h2>
+    <div class="intro"><p>${esc(o.scene)}</p></div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Programmbausteine</p>
+    <h2>Was Ludwig bei ${esc(o.name)} übernimmt</h2>
+    <div class="cards cards--2">
+      ${o.formats.map((f) => `<div class="card"><h3>${esc(f.n)}</h3><p>${esc(f.d)}</p></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Leistungsumfang</p>
+    <h2>Was die Audienz umfasst</h2>
+    <p class="intro">Jeder Einsatz wird individuell auf Ihr Event zugeschnitten — und beinhaltet standardmäßig:</p>
+    <ul class="check">
+      ${SCOPE.map((s) => `<li>${esc(s)}</li>`).join('\n      ')}
+    </ul>
+    <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Das konkrete Angebot richtet sich nach Format, Dauer und Ort. Anreise und Logistik werden im Angebot berücksichtigt.</small></p>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Ablauf</p>
+    <h2>So funktioniert die Buchung</h2>
+    <div class="steps">
+      ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <p class="kicker">Häufige Fragen</p>
+    <h2>${esc(o.name)} — FAQ</h2>
+    <div class="faq">
+      ${o.faq.map((f) => `<details><summary>${esc(f.q)}</summary><div><p>${esc(f.a)}</p></div></details>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Ratgeber</p>
+    <h2>Weiterlesen zum Thema</h2>
+    <div class="cards">
+      ${guides.map((r) => `<div class="card postcard"><time datetime="${r.date}">${fmtDate(r.date)}</time><h3><a href="/blog/${r.slug}/">${esc(r.title)}</a></h3><p>${esc(r.excerpt)}</p><span class="more">Weiterlesen →</span></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Beliebte Einsatzorte</p>
+    <h2>${esc(o.name)} — Roboter mieten in Ihrer Stadt</h2>
+    <div class="linkrow">
+      ${cities.map((c) => `<a href="/roboter-mieten/${c.slug}/">Roboter mieten in ${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle Einsatzorte →</a>
+    </div>
+    <div class="linkrow">
+      ${relatedOcc.map((r) => `<a href="/event-roboter/${r.slug}/">${esc(r.linkLabel)}</a>`).join('\n      ')}
+      <a href="/event-roboter/">Alle Anlässe →</a>
+    </div>
+  </div>
+</section>
+
+${ctaBand(null)}`;
+
+  return { path, html: page({ path, title: `${o.title} | Robotollern`, ogTitle: o.title, desc: o.metaDesc, jsonld, body, idx: i + 31 }) };
+}
+
+function occasionsHub() {
+  const path = '/event-roboter/';
+  const title = 'Event-Roboter mieten — für Messe, Konferenz, Firmenfeier & mehr';
+  const desc = 'Event-Roboter für jeden Anlass mieten: Messe, Konferenz, Firmenfeier, Weihnachtsfeier, Produktlaunch, Eröffnung, Gala & Hochzeit. Mit Operator, ab 2.500 € zzgl. USt.';
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage', '@id': `${SITE}${path}#page`, url: `${SITE}${path}`,
+        name: title, inLanguage: 'de-DE', isPartOf: { '@id': `${SITE}/#website` },
+      },
+      {
+        '@type': 'ItemList',
+        itemListElement: OCCASIONS.map((o, i) => ({ '@type': 'ListItem', position: i + 1, name: o.title, url: `${SITE}/event-roboter/${o.slug}/` })),
+      },
+      breadcrumbLd([['Start', '/'], ['Event-Roboter', null]]),
+    ],
+  };
+  const body = `
+${crumbsHtml([['Start', '/'], ['Event-Roboter', null]])}
+<header class="hero">
+  <div class="container hero__grid">
+    <div>
+      <p class="kicker">Anlässe · Alle Formate</p>
+      <h1>Event-Roboter mieten — <em>für jeden Anlass</em></h1>
+      <p class="lead">Vom Messestand bis zur Hochzeit: Ludwig II. von Robotollern, der humanoide Event-Roboter (Unitree G1), hat für jeden Anlass das passende Format — mit Operator, versichert und deutschlandweit unterwegs. Wählen Sie Ihren Anlass und sehen Sie, wie der Auftritt abläuft.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="/#contact">Roboter buchen</a>
+        <a class="btn btn--ghost" href="/roboter-mieten/">Einsatzorte ansehen</a>
+      </div>
+      <ul class="chips"><li>8 Anlässe</li><li>Operator inklusive</li><li>Versichert</li><li>Ab 2.500 € zzgl. USt.</li></ul>
+    </div>
+    <div class="hero__img">
+      <img src="/assets/robots/king-wave.webp" width="640" height="960" alt="Humanoider Event-Roboter Ludwig II. winkt — für jeden Event-Anlass mietbar" fetchpriority="high">
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Alle Anlässe</p>
+    <h2>Wofür möchten Sie den Event-Roboter mieten?</h2>
+    <div class="cards cards--2">
+      ${OCCASIONS.map((o) => `<div class="card"><h3><a href="/event-roboter/${o.slug}/">${esc(o.name)}</a></h3><p>${esc(o.intro)}</p><span class="more"><a href="/event-roboter/${o.slug}/">Zum Anlass →</a></span></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Einsatzorte</p>
+    <h2>Deutschlandweit im Einsatz — auch in Ihrer Stadt</h2>
+    <div class="linkrow">
+      ${CITIES.slice(0, 12).map((c) => `<a href="/roboter-mieten/${c.slug}/">${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle 30 Einsatzorte →</a>
+    </div>
+  </div>
+</section>
+
 ${ctaBand(null)}`;
   return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
 }
@@ -478,6 +765,8 @@ function sitemap(paths) {
     { loc: '/', pri: '1.0', freq: 'weekly' },
     { loc: '/roboter-mieten/', pri: '0.9', freq: 'weekly' },
     ...CITIES.map((c) => ({ loc: `/roboter-mieten/${c.slug}/`, pri: '0.8', freq: 'monthly' })),
+    { loc: '/event-roboter/', pri: '0.9', freq: 'weekly' },
+    ...OCCASIONS.map((o) => ({ loc: `/event-roboter/${o.slug}/`, pri: '0.8', freq: 'monthly' })),
     { loc: '/blog/', pri: '0.7', freq: 'weekly' },
     ...POSTS.map((p) => ({ loc: `/blog/${p.slug}/`, pri: '0.7', freq: 'monthly' })),
   ];
@@ -496,7 +785,14 @@ Sitemap: ${SITE}/sitemap.xml
 
 /* ---------- write everything ---------- */
 
-const pages = [hubPage(), ...CITIES.map(cityPage), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
+const pages = [
+  hubPage(),
+  ...CITIES.map(cityPage),
+  occasionsHub(),
+  ...OCCASIONS.map(occasionPage),
+  blogHub(),
+  ...POSTS.map((p, i) => postPage(p, POSTS, i)),
+];
 for (const { path, html } of pages) {
   const file = join(ROOT, path, 'index.html');
   mkdirSync(dirname(file), { recursive: true });

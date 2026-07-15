@@ -531,6 +531,12 @@
       h('a', { href: t.citiesAll[0], style: { color: 'var(--ember-300)' } }, t.citiesAll[1]),
       h('a', { href: t.blogLink[0], style: { color: 'var(--ember-300)' } }, t.blogLink[1])) : null;
 
+    /* SEO: Anlass-Spalte — interne Links auf die Anlass-Landingpages */
+    var occCol = t.occasions ? h('nav', { class: 'foot-col', 'aria-label': t.occLabel },
+      h('span', { class: 'foot-col__h' }, t.occLabel),
+      t.occasions.map(function (p) { return h('a', { href: p[0] }, p[1]); }),
+      h('a', { href: t.occAll[0], style: { color: 'var(--ember-300)' } }, t.occAll[1])) : null;
+
     var legalCol = h('div', { class: 'foot-col' }, h('span', { class: 'foot-col__h' }, t.legalLabel));
     t.legal.forEach(function (p) { legalCol.appendChild(h('button', { type: 'button', class: 'foot-legalbtn', on: { click: function () { openLegal(p[0]); } } }, p[1])); });
     legalCol.appendChild(h('button', { type: 'button', class: 'foot-legalbtn', on: { click: openCookieSettings } }, t.cookies));
@@ -543,7 +549,7 @@
         h('div', { class: 'foot-ai' },
           h('span', { class: 'badge-live' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), t.ai),
           h('p', null, t.aiBody)),
-        h('div', { class: 'foot-grid' }, brand, navCol, citiesCol, legalCol),
+        h('div', { class: 'foot-grid' }, brand, navCol, citiesCol, occCol, legalCol),
         h('p', { class: 'foot-b2b' }, t.b2b),
         h('div', { class: 'foot-base' },
           h('span', null, '© ' + year + ' ' + (cfg.legal.publicBrand || 'GERA') + ' · ' + t.rights),
