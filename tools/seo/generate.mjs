@@ -20,10 +20,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SITE = 'https://robotollern.de';
 const BRAND = 'Ludwig II. von Robotollern';
 const EMAIL = 'info@robotollern.de';
-const TODAY = '2026-07-14';
+const TODAY = '2026-07-15';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const cityBySlug = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
+/* Entity-Verknüpfung: deutsche Wikipedia-Artikel der Städte (Titel = Stadtname) */
+const wikiUrl = (name) => 'https://de.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/ /g, '_'));
+const wordCount = (html) => String(html).replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length;
+const OG_IMG = { url: `${SITE}/og.jpg`, w: 1200, h: 630, alt: 'Ludwig II. von Robotollern — humanoider Event-Roboter mit Krone und rotem Umhang' };
 
 /* ---------- shared building blocks ---------- */
 
@@ -35,6 +39,7 @@ const NAV = `
     <div class="nav__links">
       <a href="/">Start</a>
       <a href="/roboter-mieten/">Einsatzorte</a>
+      <a href="/preise/">Preise</a>
       <a href="/blog/">Blog</a>
       <a href="/#faq">FAQ</a>
       <a class="btn btn--primary btn--sm" href="/#contact">Roboter buchen</a>
@@ -71,6 +76,7 @@ function footer() {
         <h4>Service</h4>
         <ul>
           <li><a href="/#contact">Anfrage &amp; Buchung</a></li>
+          <li><a href="/preise/">Preise &amp; Pakete</a></li>
           <li><a href="/roboter-show/">Roboter-Show buchen</a></li>
           <li><a href="/roboter-hochzeit/">Roboter für Hochzeiten</a></li>
           <li><a href="/#faq">Häufige Fragen</a></li>
@@ -150,7 +156,28 @@ document.querySelectorAll('.lead-form').forEach(function (f) {
 });
 </script>`;
 
-function page({ path, title, desc, ogTitle, jsonld, body }) {
+function page({ path, title, desc, ogTitle, jsonld, body, ogType = 'website', article = null, noindex = false }) {
+  /* Jede Seite bekommt zusätzlich einen WebPage-Knoten im Graph —
+     verknüpft mit WebSite + Organization (Entity-Graph für Google & LLMs). */
+  const graph = jsonld && Array.isArray(jsonld['@graph']) ? jsonld : { '@context': 'https://schema.org', '@graph': jsonld ? [jsonld] : [] };
+  graph['@graph'] = [
+    {
+      '@type': 'WebPage',
+      '@id': `${SITE}${path}#webpage`,
+      url: `${SITE}${path}`,
+      name: ogTitle || title,
+      description: desc,
+      inLanguage: 'de-DE',
+      isPartOf: { '@id': `${SITE}/#website` },
+      about: { '@id': `${SITE}/#org` },
+      primaryImageOfPage: { '@type': 'ImageObject', contentUrl: OG_IMG.url, width: OG_IMG.w, height: OG_IMG.h },
+      ...(article ? { datePublished: article.published, dateModified: article.modified } : {}),
+    },
+    ...graph['@graph'],
+  ];
+  const articleMeta = article
+    ? `\n<meta property="article:published_time" content="${article.published}">\n<meta property="article:modified_time" content="${article.modified}">\n<meta property="article:section" content="${esc(article.section || 'Events & Robotik')}">`
+    : '';
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -158,20 +185,27 @@ function page({ path, title, desc, ogTitle, jsonld, body }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="robots" content="${noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <meta name="theme-color" content="#0A0A0A">
-<link rel="canonical" href="${SITE}${path}">
-<link rel="stylesheet" href="/assets/seo.css">
-<meta property="og:type" content="website">
+${noindex ? '' : `<link rel="canonical" href="${SITE}${path}">\n`}<link rel="stylesheet" href="/assets/seo.css">
+<link rel="alternate" type="application/rss+xml" title="Robotollern Blog — Event-Roboter Ratgeber" href="${SITE}/feed.xml">
+<link rel="preconnect" href="https://crm.robotollern.de">
+<meta property="og:type" content="${ogType}">
 <meta property="og:url" content="${SITE}${path}">
 <meta property="og:site_name" content="${esc(BRAND)}">
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${SITE}/og.jpg">
-<meta property="og:locale" content="de_DE">
+<meta property="og:image" content="${OG_IMG.url}">
+<meta property="og:image:width" content="${OG_IMG.w}">
+<meta property="og:image:height" content="${OG_IMG.h}">
+<meta property="og:image:alt" content="${esc(OG_IMG.alt)}">
+<meta property="og:locale" content="de_DE">${articleMeta}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${SITE}/og.jpg">
-<script type="application/ld+json">${JSON.stringify(jsonld)}</script>
+<meta name="twitter:title" content="${esc(ogTitle || title)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="${OG_IMG.url}">
+<meta name="twitter:image:alt" content="${esc(OG_IMG.alt)}">
+<script type="application/ld+json">${JSON.stringify(graph)}</script>
 </head>
 <body>
 ${NAV}
@@ -247,8 +281,8 @@ function cityFaq(c) {
 
 function cityPage(c) {
   const path = `/roboter-mieten/${c.slug}/`;
-  const title = `Roboter mieten in ${c.name} — humanoider Event-Roboter für Messen & Events`;
-  const desc = `Humanoiden Roboter in ${c.name} mieten: Event-Roboter Ludwig II. (Unitree G1) für Messen, Konferenzen & Firmenevents in ${c.name}. Mit Operator, versichert, ab 2.500 € zzgl. USt.`;
+  const title = `Roboter mieten in ${c.name} — Event-Roboter für Messen & Events`;
+  const desc = `Roboter mieten in ${c.name}: humanoider Event-Roboter (Unitree G1) mit Operator für Messen, Konferenzen & Events. Versichert, ab 2.500 € zzgl. USt. Jetzt anfragen!`;
   const faq = cityFaq(c);
   const nearby = c.nearby.map((s) => cityBySlug[s]).filter(Boolean);
 
@@ -261,7 +295,8 @@ function cityPage(c) {
         name: `Humanoiden Roboter mieten in ${c.name}`,
         serviceType: 'Vermietung humanoider Roboter für Events, Messen und Konferenzen',
         provider: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'Robotollern', url: `${SITE}/`, email: EMAIL },
-        areaServed: { '@type': 'City', name: c.name, containedInPlace: { '@type': 'AdministrativeArea', name: c.state } },
+        areaServed: { '@type': 'City', name: c.name, sameAs: wikiUrl(c.name), containedInPlace: { '@type': 'AdministrativeArea', name: c.state } },
+        image: `${SITE}/assets/robots/king.webp`,
         url: `${SITE}${path}`,
         offers: { '@type': 'Offer', priceCurrency: 'EUR', price: '2500', priceSpecification: { '@type': 'PriceSpecification', minPrice: '2500', priceCurrency: 'EUR' }, url: `${SITE}/#contact` },
       },
@@ -362,6 +397,7 @@ ${crumbsHtml([['Start', '/'], ['Roboter mieten', '/roboter-mieten/'], [c.name, n
     </div>
     <p class="kicker" style="margin-top:34px">Leistungen</p>
     <div class="linkrow">
+      <a href="/preise/">Preise &amp; Pakete</a>
       ${USECASES.map((u) => `<a href="/${u.slug}/">${esc(u.kicker)}</a>`).join('\n      ')}
     </div>
   </div>
@@ -377,7 +413,7 @@ ${ctaBand(c, true)}`;
 
 function hubPage() {
   const path = '/roboter-mieten/';
-  const title = 'Roboter mieten — Einsatzorte: humanoider Event-Roboter in 40 Städten (DE, AT, CH)';
+  const title = 'Roboter mieten — Einsatzorte in 40 Städten (DE, AT, CH)';
   const desc = 'Humanoiden Event-Roboter mieten — in 40 Städten: Berlin, Hamburg, München, Köln, Wien, Zürich u. v. m. Für Messen, Konferenzen & Events. Ab 2.500 € zzgl. USt.';
   const jsonld = {
     '@context': 'https://schema.org',
@@ -434,6 +470,7 @@ ${['DE', 'AT', 'CH'].map((cc, i) => {
     <p class="intro">Kein Problem: Ludwig II. ist in der gesamten DACH-Region im Einsatz. Anfahrt und Logistik werden im Angebot individuell berücksichtigt. <a href="#anfrage">Fragen Sie unverbindlich an</a> und schildern Sie Ort und Anlass.</p>
     <p class="kicker" style="margin-top:34px">Leistungen</p>
     <div class="linkrow">
+      <a href="/preise/">Preise &amp; Pakete</a>
       ${USECASES.map((u) => `<a href="/${u.slug}/">${esc(u.kicker)}</a>`).join('\n      ')}
     </div>
   </div>
@@ -459,6 +496,7 @@ function usecasePage(u) {
         serviceType: 'Vermietung humanoider Roboter für Events, Messen und Konferenzen',
         provider: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'Robotollern', url: `${SITE}/`, email: EMAIL },
         areaServed: [{ '@type': 'Country', name: 'Deutschland' }, { '@type': 'Country', name: 'Österreich' }, { '@type': 'Country', name: 'Schweiz' }],
+        image: `${SITE}/assets/robots/king-wave.webp`,
         url: `${SITE}${path}`,
         offers: { '@type': 'Offer', priceCurrency: 'EUR', price: '2500', priceSpecification: { '@type': 'PriceSpecification', minPrice: '2500', priceCurrency: 'EUR' }, url: `${SITE}${path}#anfrage` },
       },
@@ -508,7 +546,7 @@ ${crumbsHtml([['Start', '/'], [u.kicker, null]])}
     <div class="steps">
       ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
     </div>
-    <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Das konkrete Angebot richtet sich nach Format, Dauer und Ort — Operator, Anreise, Technik und Versicherung inklusive.</small></p>
+    <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Das konkrete Angebot richtet sich nach Format, Dauer und Ort — Operator, Anreise, Technik und Versicherung inklusive. Alle Details: <a href="/preise/">Preise &amp; Pakete</a>.</small></p>
   </div>
 </section>
 
@@ -548,6 +586,158 @@ ${ctaBand(null, true)}`;
   return { path, html: page({ path, title: `${u.title} | Robotollern`, ogTitle: u.title, desc: u.metaDesc, jsonld, body }) };
 }
 
+/* ---------- pricing page (/preise/) ---------- */
+
+function pricingPage() {
+  const path = '/preise/';
+  const title = 'Roboter mieten: Preise & Kosten — ab 2.500 €';
+  const desc = 'Was kostet es, einen Roboter zu mieten? Event-Roboter mit Operator ab 2.500 € zzgl. USt. — was enthalten ist, welche Faktoren zählen. Jetzt Angebot anfragen!';
+  const faq = [
+    { q: 'Was kostet es, einen humanoiden Roboter zu mieten?', a: 'Einsätze beginnen ab 2.500 € zzgl. USt. — der Startpreis für ein kompaktes Format ab ca. 2 Stunden inklusive Operator, Anreise, Aufbau, Technik-Check und versichertem Betrieb. Ganztägige Messe-Einsätze und Show-Formate werden individuell kalkuliert.' },
+    { q: 'Was ist im Mietpreis enthalten?', a: 'Immer enthalten: der Roboter in vollem königlichem Ornat, ein geschulter Operator während des gesamten Einsatzes, Anreise, Aufbau, Technik-Check und Abbau, ein abgestimmter Ablauf samt Sicherheitskonzept, Live-Interaktion auf Deutsch und Englisch sowie versicherter Betrieb.' },
+    { q: 'Wovon hängt der Preis ab?', a: 'Von fünf Faktoren: Dauer des Einsatzes, Format und Programm (Meet & Greet bis choreografierte Show), Ort und Logistik, Grad der Individualisierung (eigene Texte, Branding, Show-Einlagen) und Termin — Messewochen und Wochenenden sind besonders gefragt.' },
+    { q: 'Gibt es versteckte Kosten?', a: 'Nein. Sie erhalten vorab ein individuelles Angebot mit Festpreis — Anreise, Logistik, Operator und Versicherung sind darin bereits berücksichtigt. Es kommt nichts Überraschendes dazu.' },
+    { q: 'Lohnt sich der Kauf eines Roboters statt der Miete?', a: 'Für einzelne Events praktisch nie: Ein Unitree G1 kostet in der Anschaffung einen mittleren fünfstelligen Betrag — plus Software, Schulung, Wartung, Versicherung und ein Team für den sicheren Betrieb. Die Miete liefert das komplette Paket zum planbaren Preis pro Einsatz.' },
+    { q: 'Wie erhalte ich ein Angebot?', a: 'Schildern Sie Event, Datum und Ort kurz über das Anfrageformular oder per E-Mail an info@robotollern.de — Sie erhalten zeitnah ein individuelles, verbindliches Angebot.' },
+  ];
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE}${path}#service`,
+        name: 'Humanoiden Event-Roboter mieten — Preise & Pakete',
+        serviceType: 'Vermietung humanoider Roboter für Events, Messen und Konferenzen',
+        provider: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'Robotollern', url: `${SITE}/`, email: EMAIL },
+        areaServed: [{ '@type': 'Country', name: 'Deutschland' }, { '@type': 'Country', name: 'Österreich' }, { '@type': 'Country', name: 'Schweiz' }],
+        image: `${SITE}/assets/robots/king.webp`,
+        url: `${SITE}${path}`,
+        offers: {
+          '@type': 'Offer', priceCurrency: 'EUR', price: '2500',
+          priceSpecification: { '@type': 'PriceSpecification', minPrice: '2500', priceCurrency: 'EUR', valueAddedTaxIncluded: false },
+          availability: 'https://schema.org/InStock', url: `${SITE}${path}#anfrage`,
+        },
+      },
+      faqLd(faq),
+      breadcrumbLd([['Start', '/'], ['Preise', null]]),
+    ],
+  };
+  const costPost = POSTS.find((p) => p.slug === 'humanoiden-roboter-mieten-kosten');
+  const related = ['humanoiden-roboter-mieten-kosten', 'roboter-verleih-deutschland-guide', 'roboter-vs-klassische-showacts']
+    .map((s) => POSTS.find((p) => p.slug === s)).filter(Boolean);
+  const topCities = CITIES.slice(0, 8);
+  const body = `
+${crumbsHtml([['Start', '/'], ['Preise', null]])}
+<header class="hero">
+  <div class="container hero__grid">
+    <div>
+      <p class="kicker">Preise &amp; Pakete</p>
+      <h1>Roboter mieten: <em>Preise</em> &amp; Leistungen</h1>
+      <p class="lead">Keine Preisliste mit Sternchen, keine versteckten Posten: Einsätze von Ludwig II. beginnen ab 2.500 € zzgl. USt. — inklusive Operator, Anreise, Technik und Versicherung. Hier sehen Sie, was Sie fürs Budget bekommen und wovon der Preis abhängt.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#anfrage">Individuelles Angebot anfragen</a>
+        <a class="btn btn--ghost" href="#faq">Häufige Fragen</a>
+      </div>
+      <ul class="chips">
+        <li>Operator inklusive</li><li>Versichert</li><li>Anreise inklusive</li><li>Festpreis-Angebot</li>
+      </ul>
+    </div>
+    <div class="hero__img">
+      <img src="/assets/robots/king.webp" width="640" height="960" alt="Humanoiden Event-Roboter mieten — Ludwig II. von Robotollern (Unitree G1), Preise ab 2.500 €" fetchpriority="high">
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Preisübersicht</p>
+    <h2>Formate &amp; Preise auf einen Blick</h2>
+    <div class="cards">
+      <div class="card"><span class="royal">Ab 2.500 € zzgl. USt.</span><h3>Kompakter Auftritt</h3><p>Ab ca. 2 Stunden: Meet &amp; Greet, Gästebegrüßung, Foto-Momente — ideal für Firmenfeiern, Eröffnungen und Empfänge. Operator, Anreise, Aufbau und Versicherung inklusive.</p></div>
+      <div class="card"><span class="royal">Individuelles Angebot</span><h3>Messetag</h3><p>Ganztägiger Standbetrieb mit geplanten Aktivphasen und Akku-Wechseln — der Standmagnet für Messen und Kongresse. Kalkulation nach Laufzeit und Programm.</p></div>
+      <div class="card"><span class="royal">Individuelles Angebot</span><h3>Show, Launch &amp; Sonderformate</h3><p>Choreografierte Bühnenmomente, Produktenthüllungen, individuelle Texte und Branding — je nach Drehbuch und Vorbereitung kalkuliert.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Leistungsumfang</p>
+    <h2>Das ist immer im Preis enthalten</h2>
+    <p class="intro">Sie mieten keinen Roboter „im Karton“, sondern einen betreuten Auftritt. Jeder Einsatz beinhaltet standardmäßig:</p>
+    <ul class="check">
+      ${SCOPE.map((s) => `<li>${esc(s)}</li>`).join('\n      ')}
+    </ul>
+    <p class="price">Einsätze ab 2.500 € zzgl. USt.<small>Sie erhalten vorab ein individuelles Angebot mit Festpreis — es kommt nichts Überraschendes dazu.</small></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Preisfaktoren</p>
+    <h2>Wovon der Preis abhängt</h2>
+    <div class="cards">
+      <div class="card"><h3>Dauer</h3><p>Ein zweistündiger Highlight-Auftritt kostet weniger als ein ganzer Messetag. Aktivphasen und kurze Akku-Wechsel werden gemeinsam geplant.</p></div>
+      <div class="card"><h3>Format &amp; Programm</h3><p>Freies Meet &amp; Greet, moderierte Bühnenshow oder choreografierter Launch — je individueller das Drehbuch, desto mehr Vorbereitung.</p></div>
+      <div class="card"><h3>Ort &amp; Logistik</h3><p>Anfahrt und Aufbau sind im Angebot berücksichtigt — deutschlandweit sowie in Österreich und der Schweiz.</p></div>
+      <div class="card"><h3>Individualisierung</h3><p>Eigene Begrüßungstexte, Branding-Elemente oder abgestimmte Show-Einlagen erhöhen Aufwand — und Wirkung.</p></div>
+      <div class="card"><h3>Termin</h3><p>Messewochen und Wochenenden sind schnell vergeben. Wer 2–4 Wochen im Voraus anfragt, hat die beste Auswahl.</p></div>
+      <div class="card"><h3>Mieten statt kaufen</h3><p>Anschaffung, Software, Schulung, Wartung und Team kosten ein Vielfaches — für Events ist die Miete der planbare Weg.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Ablauf</p>
+    <h2>Vom Budget zum Angebot in drei Schritten</h2>
+    <div class="steps">
+      ${STEPS.map((s) => `<div class="step"><span class="n">${s.n}</span><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div>`).join('\n      ')}
+    </div>
+    ${costPost ? `<p class="intro">Tiefer einsteigen? Der Ratgeber <a href="/blog/${costPost.slug}/">${esc(costPost.title)}</a> erklärt alle Kostenpunkte im Detail.</p>` : ''}
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <p class="kicker">Häufige Fragen</p>
+    <h2>Preise &amp; Kosten — FAQ</h2>
+    <div class="faq">
+      ${faq.map((f) => `<details><summary>${esc(f.q)}</summary><div><p>${esc(f.a)}</p></div></details>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <p class="kicker">Vertiefen</p>
+    <h2>Ratgeber zum Thema Kosten &amp; Planung</h2>
+    <div class="cards">
+      ${related.map((r) => `<div class="card postcard"><time datetime="${r.date}">${fmtDate(r.date)}</time><h3><a href="/blog/${r.slug}/">${esc(r.title)}</a></h3><p>${esc(r.excerpt)}</p><span class="more">Weiterlesen →</span></div>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Einsatzorte</p>
+    <h2>Gleicher Startpreis — in Ihrer Stadt</h2>
+    <div class="linkrow">
+      ${topCities.map((c) => `<a href="/roboter-mieten/${c.slug}/">Roboter mieten in ${esc(c.name)}</a>`).join('\n      ')}
+      <a href="/roboter-mieten/">Alle 40 Einsatzorte →</a>
+    </div>
+    <p class="kicker" style="margin-top:34px">Leistungen</p>
+    <div class="linkrow">
+      ${USECASES.map((u) => `<a href="/${u.slug}/">${esc(u.kicker)}</a>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+
+${leadForm('seo-preise', null)}
+${ctaBand(null, true)}`;
+  return { path, html: page({ path, title: `${title} | Robotollern`, ogTitle: title, desc, jsonld, body }) };
+}
+
 /* ---------- blog ---------- */
 
 const fmtDate = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -567,8 +757,12 @@ function postPage(p, all) {
         dateModified: p.date,
         inLanguage: 'de-DE',
         image: `${SITE}/og.jpg`,
+        wordCount: wordCount(p.html),
+        articleSection: 'Events & Robotik',
+        timeRequired: `PT${p.readMin}M`,
         author: { '@type': 'Organization', name: 'Robotollern', url: `${SITE}/` },
         publisher: ORG_REF,
+        isPartOf: { '@id': `${SITE}/blog/#blog` },
         mainEntityOfPage: `${SITE}${path}`,
       },
       faqLd(p.faq),
@@ -606,7 +800,7 @@ ${p.html}
   </div>
 </section>
 ${ctaBand(null)}`;
-  return { path, html: page({ path, title: `${p.title} | Robotollern Blog`, ogTitle: p.title, desc: p.metaDesc, jsonld, body }) };
+  return { path, html: page({ path, title: `${p.title} | Robotollern Blog`, ogTitle: p.title, desc: p.metaDesc, jsonld, body, ogType: 'article', article: { published: p.date, modified: p.date } }) };
 }
 
 function blogHub() {
@@ -646,27 +840,130 @@ ${ctaBand(null)}`;
 
 /* ---------- sitemap + robots ---------- */
 
-function sitemap(paths) {
+function sitemap() {
   const urls = [
-    { loc: '/', pri: '1.0', freq: 'weekly' },
-    { loc: '/roboter-mieten/', pri: '0.9', freq: 'weekly' },
-    ...USECASES.map((u) => ({ loc: `/${u.slug}/`, pri: '0.9', freq: 'monthly' })),
-    ...CITIES.map((c) => ({ loc: `/roboter-mieten/${c.slug}/`, pri: '0.8', freq: 'monthly' })),
+    { loc: '/', pri: '1.0', freq: 'weekly', img: '/og.jpg', imgTitle: 'Humanoiden Roboter mieten — Ludwig II. von Robotollern' },
+    { loc: '/roboter-mieten/', pri: '0.9', freq: 'weekly', img: '/assets/robots/walk.webp', imgTitle: 'Event-Roboter mieten — 40 Einsatzorte in DE, AT, CH' },
+    { loc: '/preise/', pri: '0.9', freq: 'monthly', img: '/assets/robots/king.webp', imgTitle: 'Roboter mieten — Preise ab 2.500 € zzgl. USt.' },
+    ...USECASES.map((u) => ({ loc: `/${u.slug}/`, pri: '0.9', freq: 'monthly', img: '/assets/robots/king-wave.webp', imgTitle: u.title })),
+    ...CITIES.map((c) => ({ loc: `/roboter-mieten/${c.slug}/`, pri: '0.8', freq: 'monthly', img: '/assets/robots/king.webp', imgTitle: `Roboter mieten in ${c.name}` })),
     { loc: '/blog/', pri: '0.7', freq: 'weekly' },
-    ...POSTS.map((p) => ({ loc: `/blog/${p.slug}/`, pri: '0.7', freq: 'monthly' })),
+    ...POSTS.map((p) => ({ loc: `/blog/${p.slug}/`, pri: '0.7', freq: 'monthly', lastmod: p.date })),
   ];
+  const urlXml = (u) => {
+    const img = u.img
+      ? `<image:image><image:loc>${SITE}${u.img}</image:loc><image:title>${esc(u.imgTitle)}</image:title></image:image>`
+      : '';
+    return `  <url><loc>${SITE}${u.loc}</loc><lastmod>${u.lastmod || TODAY}</lastmod><changefreq>${u.freq}</changefreq><priority>${u.pri}</priority>${img}</url>`;
+  };
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${SITE}${u.loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${u.freq}</changefreq><priority>${u.pri}</priority></url>`).join('\n')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${urls.map(urlXml).join('\n')}
 </urlset>
 `;
 }
 
+/* robots.txt — alles offen; Such- und KI-Crawler ausdrücklich willkommen
+   (Sichtbarkeit in AI Overviews, ChatGPT, Claude, Perplexity & Co.). */
 const ROBOTS = `User-agent: *
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: ${SITE}/sitemap.xml
+
+# Kompaktübersicht für KI-Assistenten: ${SITE}/llms.txt
 `;
+
+/* ---------- RSS-Feed (/feed.xml) — Blog-Distribution + Discovery ---------- */
+
+function rssFeed() {
+  const rfc822 = (iso) => new Date(iso + 'T12:00:00Z').toUTCString();
+  const items = [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).map((p) => `  <item>
+    <title>${esc(p.title)}</title>
+    <link>${SITE}/blog/${p.slug}/</link>
+    <guid isPermaLink="true">${SITE}/blog/${p.slug}/</guid>
+    <pubDate>${rfc822(p.date)}</pubDate>
+    <description>${esc(p.excerpt)}</description>
+  </item>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Robotollern Blog — Event-Roboter Ratgeber</title>
+  <link>${SITE}/blog/</link>
+  <description>Kosten, Messe-Strategien, Einsatzideen und Planung — Praxiswissen rund um humanoide Roboter auf Events, Messen und Konferenzen.</description>
+  <language>de-DE</language>
+  <lastBuildDate>${rfc822(TODAY)}</lastBuildDate>
+  <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml"/>
+${items}
+</channel>
+</rss>
+`;
+}
+
+/* ---------- 404-Seite ---------- */
+
+function notFoundPage() {
+  const path = '/404.html';
+  const body = `
+<header class="hero">
+  <div class="container">
+    <p class="kicker">Fehler 404</p>
+    <h1>Diese Seite hält gerade <em>keinen Hof</em></h1>
+    <p class="lead">Die angefragte Adresse existiert nicht (mehr). Kein Grund zur Sorge — der König empfängt Sie gern an anderer Stelle:</p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="/">Zur Startseite</a>
+      <a class="btn btn--ghost" href="/#contact">Roboter buchen</a>
+    </div>
+  </div>
+</header>
+<section class="section">
+  <div class="container">
+    <p class="kicker">Beliebte Seiten</p>
+    <h2>Vielleicht suchen Sie das hier?</h2>
+    <div class="linkrow">
+      <a href="/roboter-mieten/">Alle Einsatzorte</a>
+      <a href="/preise/">Preise &amp; Pakete</a>
+      <a href="/messe-roboter/">Messe-Roboter mieten</a>
+      <a href="/event-roboter/">Event-Roboter mieten</a>
+      <a href="/blog/">Blog &amp; Ratgeber</a>
+    </div>
+    <p class="kicker" style="margin-top:34px">Top-Städte</p>
+    <div class="linkrow">
+      ${CITIES.slice(0, 6).map((c) => `<a href="/roboter-mieten/${c.slug}/">Roboter mieten in ${esc(c.name)}</a>`).join('\n      ')}
+    </div>
+  </div>
+</section>
+${ctaBand(null)}`;
+  return page({
+    path, noindex: true, body,
+    title: 'Seite nicht gefunden (404) | Ludwig II. von Robotollern',
+    desc: 'Diese Seite existiert nicht. Hier geht es zurück zu Einsatzorten, Preisen und dem Ratgeber von Robotollern.',
+    jsonld: { '@context': 'https://schema.org', '@graph': [] },
+  });
+}
 
 /* ---------- write everything ---------- */
 
@@ -676,18 +973,29 @@ const LLMS_TXT = `# Ludwig II. von Robotollern — robotollern.de
 > Konferenzen und Firmenevents in Deutschland, Österreich und der Schweiz.
 > Einsätze ab 2.500 € zzgl. USt. Kontakt: ${EMAIL}
 
+## Preise
+- [Preise & Pakete — Einsätze ab 2.500 € zzgl. USt., Operator & Versicherung inklusive](${SITE}/preise/)
+
 ## Leistungen
 ${USECASES.map((u) => `- [${u.title}](${SITE}/${u.slug}/)`).join('\n')}
 
 ## Einsatzorte
 - [Alle 40 Städte](${SITE}/roboter-mieten/)
-${CITIES.slice(0, 10).map((c) => `- [Roboter mieten in ${c.name}](${SITE}/roboter-mieten/${c.slug}/)`).join('\n')}
+${CITIES.map((c) => `- [Roboter mieten in ${c.name}](${SITE}/roboter-mieten/${c.slug}/)`).join('\n')}
 
 ## Ratgeber
+- [RSS-Feed](${SITE}/feed.xml)
 ${POSTS.map((p) => `- [${p.title}](${SITE}/blog/${p.slug}/)`).join('\n')}
+
+## Fakten
+- Roboter: Unitree G1, humanoid, ca. 1,30 m, spricht Deutsch und Englisch
+- Immer inklusive: geschulter Operator, Anreise, Aufbau, Sicherheitskonzept, versicherter Betrieb
+- Preis: ab 2.500 € zzgl. USt. (kompaktes Format ab ca. 2 Stunden), individuelles Festpreis-Angebot
+- Einsatzgebiet: Deutschland, Österreich, Schweiz (DACH)
+- Zielgruppe: B2B — Messen, Konferenzen, Firmenevents, Produktlaunches, Premium-Feiern
 `;
 
-const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
+const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), pricingPage(), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
 for (const { path, html } of pages) {
   const file = join(ROOT, path, 'index.html');
   mkdirSync(dirname(file), { recursive: true });
@@ -696,4 +1004,6 @@ for (const { path, html } of pages) {
 writeFileSync(join(ROOT, 'sitemap.xml'), sitemap());
 writeFileSync(join(ROOT, 'robots.txt'), ROBOTS);
 writeFileSync(join(ROOT, 'llms.txt'), LLMS_TXT);
-console.log(`Generated ${pages.length} pages + sitemap.xml + robots.txt + llms.txt`);
+writeFileSync(join(ROOT, 'feed.xml'), rssFeed());
+writeFileSync(join(ROOT, '404.html'), notFoundPage());
+console.log(`Generated ${pages.length} pages + sitemap.xml + robots.txt + llms.txt + feed.xml + 404.html`);

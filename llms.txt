@@ -4,6 +4,9 @@
 > Konferenzen und Firmenevents in Deutschland, Österreich und der Schweiz.
 > Einsätze ab 2.500 € zzgl. USt. Kontakt: info@robotollern.de
 
+## Preise
+- [Preise & Pakete — Einsätze ab 2.500 € zzgl. USt., Operator & Versicherung inklusive](https://robotollern.de/preise/)
+
 ## Leistungen
 - [Messe-Roboter mieten: Humanoider Roboter als Standmagnet für Ihre Messe](https://robotollern.de/messe-roboter/)
 - [Event-Roboter mieten: Humanoider Roboter für Events — mit Operator & Versicherung](https://robotollern.de/event-roboter/)
@@ -26,8 +29,39 @@
 - [Roboter mieten in Leipzig](https://robotollern.de/roboter-mieten/leipzig/)
 - [Roboter mieten in Dortmund](https://robotollern.de/roboter-mieten/dortmund/)
 - [Roboter mieten in Essen](https://robotollern.de/roboter-mieten/essen/)
+- [Roboter mieten in Bremen](https://robotollern.de/roboter-mieten/bremen/)
+- [Roboter mieten in Dresden](https://robotollern.de/roboter-mieten/dresden/)
+- [Roboter mieten in Hannover](https://robotollern.de/roboter-mieten/hannover/)
+- [Roboter mieten in Nürnberg](https://robotollern.de/roboter-mieten/nuernberg/)
+- [Roboter mieten in Duisburg](https://robotollern.de/roboter-mieten/duisburg/)
+- [Roboter mieten in Bochum](https://robotollern.de/roboter-mieten/bochum/)
+- [Roboter mieten in Wuppertal](https://robotollern.de/roboter-mieten/wuppertal/)
+- [Roboter mieten in Bielefeld](https://robotollern.de/roboter-mieten/bielefeld/)
+- [Roboter mieten in Bonn](https://robotollern.de/roboter-mieten/bonn/)
+- [Roboter mieten in Münster](https://robotollern.de/roboter-mieten/muenster/)
+- [Roboter mieten in Mannheim](https://robotollern.de/roboter-mieten/mannheim/)
+- [Roboter mieten in Karlsruhe](https://robotollern.de/roboter-mieten/karlsruhe/)
+- [Roboter mieten in Augsburg](https://robotollern.de/roboter-mieten/augsburg/)
+- [Roboter mieten in Wiesbaden](https://robotollern.de/roboter-mieten/wiesbaden/)
+- [Roboter mieten in Mönchengladbach](https://robotollern.de/roboter-mieten/moenchengladbach/)
+- [Roboter mieten in Gelsenkirchen](https://robotollern.de/roboter-mieten/gelsenkirchen/)
+- [Roboter mieten in Aachen](https://robotollern.de/roboter-mieten/aachen/)
+- [Roboter mieten in Braunschweig](https://robotollern.de/roboter-mieten/braunschweig/)
+- [Roboter mieten in Kiel](https://robotollern.de/roboter-mieten/kiel/)
+- [Roboter mieten in Chemnitz](https://robotollern.de/roboter-mieten/chemnitz/)
+- [Roboter mieten in Wien](https://robotollern.de/roboter-mieten/wien/)
+- [Roboter mieten in Graz](https://robotollern.de/roboter-mieten/graz/)
+- [Roboter mieten in Linz](https://robotollern.de/roboter-mieten/linz/)
+- [Roboter mieten in Salzburg](https://robotollern.de/roboter-mieten/salzburg/)
+- [Roboter mieten in Innsbruck](https://robotollern.de/roboter-mieten/innsbruck/)
+- [Roboter mieten in Zürich](https://robotollern.de/roboter-mieten/zuerich/)
+- [Roboter mieten in Basel](https://robotollern.de/roboter-mieten/basel/)
+- [Roboter mieten in Bern](https://robotollern.de/roboter-mieten/bern/)
+- [Roboter mieten in Genf](https://robotollern.de/roboter-mieten/genf/)
+- [Roboter mieten in Luzern](https://robotollern.de/roboter-mieten/luzern/)
 
 ## Ratgeber
+- [RSS-Feed](https://robotollern.de/feed.xml)
 - [Humanoiden Roboter mieten: Kosten, Ablauf & Checkliste 2026](https://robotollern.de/blog/humanoiden-roboter-mieten-kosten/)
 - [Roboter auf der Messe: So wird Ihr Stand zum Besuchermagneten](https://robotollern.de/blog/roboter-auf-messen-standmagnet/)
 - [Event-Roboter: 7 Ideen für Konferenzen, Galas & Firmenevents](https://robotollern.de/blog/event-roboter-ideen-konferenzen/)
@@ -38,3 +72,10 @@
 - [Event-Roboter vs. klassische Show-Acts: Was bringt mehr Aufmerksamkeit?](https://robotollern.de/blog/roboter-vs-klassische-showacts/)
 - [Roboter-Verleih in Deutschland: Anbieter, Modelle & worauf Sie achten müssen](https://robotollern.de/blog/roboter-verleih-deutschland-guide/)
 - [KI auf Events: Wie humanoide Roboter Marketing & Leadgenerierung verändern](https://robotollern.de/blog/ki-events-leadgenerierung/)
+
+## Fakten
+- Roboter: Unitree G1, humanoid, ca. 1,30 m, spricht Deutsch und Englisch
+- Immer inklusive: geschulter Operator, Anreise, Aufbau, Sicherheitskonzept, versicherter Betrieb
+- Preis: ab 2.500 € zzgl. USt. (kompaktes Format ab ca. 2 Stunden), individuelles Festpreis-Angebot
+- Einsatzgebiet: Deutschland, Österreich, Schweiz (DACH)
+- Zielgruppe: B2B — Messen, Konferenzen, Firmenevents, Produktlaunches, Premium-Feiern
