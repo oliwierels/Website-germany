@@ -3,11 +3,11 @@
    Eigenständiges, schlankes Stylesheet; Tokens 1:1 aus styles.css.
    Kein JS nötig (FAQ via <details>). Fonts lokal (DSGVO).
    ============================================================ */
-@font-face { font-family: 'DM Serif Display'; font-style: normal; font-weight: 400; font-display: swap; src: url('/assets/fonts/dmserif-normal-400.woff2') format('woff2'); }
-@font-face { font-family: 'DM Serif Display'; font-style: italic; font-weight: 400; font-display: swap; src: url('/assets/fonts/dmserif-italic-400.woff2') format('woff2'); }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/assets/fonts/inter-normal-400.woff2') format('woff2'); }
-@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/assets/fonts/spacemono-normal-400.woff2') format('woff2'); }
-@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('/assets/fonts/spacemono-normal-700.woff2') format('woff2'); }
+@font-face { font-family: 'DM Serif Display'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/dmserif-normal-400.woff2') format('woff2'); }
+@font-face { font-family: 'DM Serif Display'; font-style: italic; font-weight: 400; font-display: swap; src: url('fonts/dmserif-italic-400.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('fonts/inter-normal-400.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/spacemono-normal-400.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/spacemono-normal-700.woff2') format('woff2'); }
 
 :root {
   --black-base: #0A0A0A; --surface-1: #141414; --surface-2: #1A1A1A;
