@@ -5,9 +5,16 @@ ręcznie poza repozytorium, żeby ruch i pozycje realnie urosły.
 
 ## Co jest zrobione (on-page / techniczne)
 
-- **65 podstron SEO**: hub miast, 40 stron miast (DE/AT/CH), 9 stron usług
-  (w tym `/roboter-festival/` — festyny, zamki, eventy historyczne),
-  strona cen `/preise/`, blog (hub + 12 artykułów), strona 404.
+- **66 podstron SEO**: hub miast, 40 stron miast (DE/AT/CH), 10 stron usług
+  (w tym `/roboter-festival/` — festyny, zamki, eventy historyczne — oraz
+  `/unitree-g1-mieten/` — komercyjna strona modelowa), strona cen
+  `/preise/`, blog (hub + 12 artykułów), strona 404.
+- **Frazy „Unitree G1 mieten"** (B2B, wysoka intencja): dedykowana strona
+  `/unitree-g1-mieten/` pokrywa warianty mieten/leihen/buchen, Messestand,
+  Kongress, Gala, Corporate Event, Marketing-Aktion, Preise/Kosten i „mit
+  Operator"; każda strona miasta ma FAQ „Kann man den Unitree G1 in X
+  mieten?" (long-tail lokalny), a copy używa zwrotów budujących zaufanie
+  w DACH: „Full-Service-Miete" i „schlüsselfertige Vermietung".
 - **Linki wewnętrzne relatywne**: generator emituje ścieżki względne
   (poprawna głębokość per strona), więc serwis działa pod rootem domeny,
   pod subpathem (preview GitHub Pages) i lokalnie.

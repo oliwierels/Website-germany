@@ -20,7 +20,7 @@ export const USECASES = [
       { t: 'Lead-Maschine am Stand', d: '„Was kann der denn?“ ist der einfachste Gesprächseinstieg der Messe — und jedes Gespräch ein potenzieller Lead.' },
       { t: 'Komplett betreut', d: 'Operator, Sicherheitskonzept, Versicherung, Abstimmung mit der Messeleitung — alles inklusive.' },
     ],
-    body: 'Ob Weltleitmesse in Hannover, Düsseldorf oder Frankfurt, gamescom in Köln oder Regionalmesse: Der Einsatz wird auf Ihre Standfläche und Ihre Ziele zugeschnitten. Empfangschef am Standrand, Show-Act zu festen Zeiten oder Produkt-Botschafter, der Ihre Neuheit präsentiert — Sie wählen das Format, wir liefern Drehbuch, Operator und Technik. Benötigt werden nur wenige Quadratmeter ebene Fläche, Strom und Internet.',
+    body: 'Ob Weltleitmesse in Hannover, Düsseldorf oder Frankfurt, gamescom in Köln oder Regionalmesse: Der Einsatz wird auf Ihre Standfläche und Ihre Ziele zugeschnitten. Empfangschef am Standrand, Show-Act zu festen Zeiten oder Produkt-Botschafter, der Ihre Neuheit präsentiert — Sie wählen das Format, wir liefern Drehbuch, Operator und Technik. Technisch steckt dahinter der Unitree G1 — als schlüsselfertige Full-Service-Miete: Messeroboter, Transport, Aufbau, Operator und Versicherung aus einer Hand. Benötigt werden nur wenige Quadratmeter ebene Fläche, Strom und Internet.',
     faq: [
       { q: 'Was kostet ein Messe-Roboter pro Tag?', a: 'Einsätze beginnen ab 2.500 € zzgl. USt. (kompaktes Format ab ca. 2 Stunden). Ganze Messetage werden individuell kalkuliert — mit geplanten Akkupausen als Programmstruktur. Sie erhalten immer ein individuelles Angebot.' },
       { q: 'Muss der Einsatz mit der Messeleitung abgestimmt werden?', a: 'In aller Regel ja — das übernehmen wir gemeinsam mit Ihnen. Sicherheitskonzept und versicherter Betrieb sind Teil des Angebots und überzeugen jede Messeleitung.' },
@@ -220,5 +220,29 @@ export const USECASES = [
       { q: 'Kann der Auftritt thematisch an unser Fest angepasst werden?', a: 'Unbedingt: Ansprachen im königlichen Ton, lokale Bezüge, Grußworte zur Eröffnung, Schlagfertigkeit zum Festmotto — das Skript wird auf Ihr Fest geschrieben, auf Wunsch auch zweisprachig (Deutsch/Englisch).' },
     ],
     relatedPosts: ['roboter-stadtfest-schlossfest', 'roboter-open-air-events', 'roboter-vs-klassische-showacts'],
+  },
+  {
+    slug: 'unitree-g1-mieten',
+    kicker: 'Unitree G1 mieten',
+    h1: ['Unitree G1 mieten — ', 'schlüsselfertig', ' mit Operator & Versicherung'],
+    title: 'Unitree G1 mieten: Humanoiden Roboter für Messe, Event & Marketing buchen',
+    metaDesc: 'Unitree G1 mieten: humanoider Roboter für Messestand, Kongress, Gala & Marketing-Aktion. Full-Service-Miete mit Operator, Transport & Versicherung. Ab 2.500 € zzgl. USt.',
+    intro: 'Sie wissen bereits, welcher Roboter es sein soll — jetzt fehlt nur der Anbieter, der ihn schlüsselfertig liefert. Bei Robotollern mieten Sie den Unitree G1 als Full-Service-Paket: als König Ludwig II. in vollem Ornat, mit geschultem Operator, Transport, Aufbau und versichertem Betrieb. Für Messestand, Kongress, Firmenfeier, Gala und Marketing-Aktion — buchbar in ganz Deutschland, Österreich und der Schweiz.',
+    benefits: [
+      { t: 'Unitree G1 für den Messestand', d: 'Der Messeroboter zieht Besucher an Ihren Stand — Messestand-Formate von 2 Stunden bis zum ganzen Messetag, abgestimmt mit der Messeleitung.' },
+      { t: 'Für Kongresse & Konferenzen leihen', d: 'Keynote-Opening, Empfang, Networking-Magnet — der humanoide Roboter fügt sich in jede Kongress-Agenda, zweisprachig DE/EN.' },
+      { t: 'Events, Galas & Corporate Events', d: 'Vom Sommerfest bis zur Abend-Gala: Der Event-Roboter wird als Showroboter, Empfangschef oder Meet-&-Greet-Star gebucht.' },
+      { t: 'Marketing-Aktionen mit Reichweite', d: 'Guerilla-Auftritt in der Fußgängerzone, Content-Dreh, Produktenthüllung — der Unitree G1 liefert die Bilder, die Kampagnen tragen.' },
+      { t: 'Full-Service-Miete: Operator inklusive', d: 'Schlüsselfertige Vermietung heißt: Transport, Aufbau, Technik-Check, geschulter Operator während des gesamten Einsatzes und Abbau — Sie kümmern sich um nichts.' },
+      { t: 'Transparente Preise', d: 'Einsätze ab 2.500 € zzgl. USt. als Festpreis-Angebot — Anreise, Operator und Versicherung bereits enthalten, keine versteckten Kosten.' },
+    ],
+    body: 'Der Unitree G1 ist der derzeit gefragteste humanoide Roboter für Events — und bei Robotollern bekommen Sie ihn nicht „im Karton“, sondern als auftrittsfertigen Charakter: König Ludwig II. mit Krone, Umhang und königlichem Humor. Die Miete ist schlüsselfertig („Full-Service“): Wir übernehmen Transport, Konfiguration, Sicherheitskonzept und stellen den Operator vor Ort. Besonders gefragt sind Einsätze auf den großen Messeplätzen — München, Berlin, Frankfurt am Main, Düsseldorf, Köln und Hannover — sowie in Wien und Zürich. Vom kompakten 2-Stunden-Format bis zum mehrtägigen Messe-Einsatz erhalten Sie ein individuelles Festpreis-Angebot.',
+    faq: [
+      { q: 'Was kostet es, einen Unitree G1 zu mieten?', a: 'Die Miete beginnt ab 2.500 € zzgl. USt. für ein kompaktes Format ab ca. 2 Stunden — als Full-Service-Paket inklusive Operator, Transport, Aufbau und versichertem Betrieb. Ganze Messetage und Show-Formate werden individuell als Festpreis kalkuliert.' },
+      { q: 'Ist ein Operator im Mietpreis enthalten?', a: 'Ja, immer. Der Unitree G1 wird ausschließlich mit geschultem Operator vermietet — er steuert den Roboter, moderiert die Interaktion und verantwortet das Sicherheitskonzept. Eine Vermietung ohne Operator bieten wir bewusst nicht an.' },
+      { q: 'Kann ich den Unitree G1 für einen Messestand mieten?', a: 'Ja — der Messeroboter ist das Kernformat: Er zieht Besucher an den Stand, erzeugt Menschentrauben und liefert Gesprächseinstiege für Ihr Vertriebsteam. Die Abstimmung mit der Messeleitung übernehmen wir gemeinsam mit Ihnen.' },
+      { q: 'Unitree G1 kaufen oder mieten — was lohnt sich?', a: 'Für Events lohnt die Miete: Die Anschaffung kostet einen mittleren fünfstelligen Betrag, dazu kommen Software, Schulung, Wartung, Versicherung und Personal. Die schlüsselfertige Miete liefert Charakter, Operator und Versicherung zum planbaren Preis pro Einsatz.' },
+    ],
+    relatedPosts: ['unitree-g1-event-einsatz', 'humanoiden-roboter-mieten-kosten', 'roboter-auf-messen-standmagnet'],
   },
 ];
