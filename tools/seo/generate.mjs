@@ -20,7 +20,16 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SITE = 'https://robotollern.de';
 const BRAND = 'Ludwig II. von Robotollern';
 const EMAIL = 'info@robotollern.de';
-const TODAY = '2026-07-15';
+const TODAY = '2026-07-17';
+
+/* Interne Links werden als Root-absolute Pfade ("/roboter-mieten/…") in den
+   Templates geschrieben und beim Schreiben tiefen-korrekt relativiert —
+   so funktioniert die Seite unter der Domain-Root, unter einem Unterpfad
+   (GitHub-Pages-Preview) und in lokalen Previews gleichermaßen. */
+function relativize(html, depth) {
+  const prefix = depth ? '../'.repeat(depth) : './';
+  return html.replace(/\b(href|src)="\/([^"/][^"]*|)"/g, (m, attr, rest) => `${attr}="${prefix}${rest}"`);
+}
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const cityBySlug = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
@@ -70,13 +79,14 @@ function footer() {
       </div>
       <div>
         <h4>Leistungen</h4>
-        <ul>${USECASES.slice(0, 6).map((u) => `<li><a href="/${u.slug}/">${esc(u.kicker)}</a></li>`).join('')}</ul>
+        <ul>${[...USECASES.slice(0, 6), ...USECASES.filter((u) => u.slug === 'roboter-festival')].map((u) => `<li><a href="/${u.slug}/">${esc(u.kicker)}</a></li>`).join('')}</ul>
       </div>
       <div>
         <h4>Service</h4>
         <ul>
           <li><a href="/#contact">Anfrage &amp; Buchung</a></li>
           <li><a href="/preise/">Preise &amp; Pakete</a></li>
+          <li><a href="/unitree-g1-mieten/">Unitree G1 mieten</a></li>
           <li><a href="/roboter-show/">Roboter-Show buchen</a></li>
           <li><a href="/roboter-hochzeit/">Roboter für Hochzeiten</a></li>
           <li><a href="/#faq">Häufige Fragen</a></li>
@@ -274,6 +284,7 @@ function cityFaq(c) {
     { q: `Was kostet es, einen Roboter in ${c.name} zu mieten?`, a: `Einsätze in ${c.name} beginnen ab 2.500 € zzgl. USt. — der Startpreis für ein kompaktes Format ab ca. 2 Stunden inklusive Operator, Anreise, Aufbau und versichertem Betrieb. Der konkrete Preis richtet sich nach Format, Dauer und Programm; Sie erhalten immer ein individuelles Angebot.` },
     { q: `Für welche Locations in ${c.name} eignet sich der Roboter?`, a: c.faqLoc },
     { q: `Wie kurzfristig ist ein Roboter-Auftritt in ${c.name} möglich?`, a: `Fragen Sie idealerweise 2–4 Wochen im Voraus an — besonders in Messewochen sind Termine schnell vergeben. Kurzfristige Anfragen für ${c.name} versuchen wir möglich zu machen; die Anreise ist ${c.country ? 'in der gesamten DACH-Region' : 'deutschlandweit'} organisiert.` },
+    { q: `Kann man den Unitree G1 in ${c.name} mieten?`, a: `Ja — Ludwig II. basiert auf dem Unitree G1, dem derzeit gefragtesten humanoiden Roboter für Events. Sie mieten ihn in ${c.name} schlüsselfertig als Full-Service-Paket: Transport, Aufbau, geschulter Operator und versicherter Betrieb sind inklusive — ideal für Messestand, Kongress und Firmenevent.` },
     { q: 'Ist der Roboter-Auftritt sicher und versichert?', a: 'Ja. Ludwig wird durchgehend von einem erfahrenen Operator begleitet und gesteuert; Ablauf und Sicherheitskonzept werden vorab mit Ihnen geplant. Der Betrieb ist versichert.' },
     { q: 'Spricht der Roboter Deutsch und Englisch?', a: 'Ja — Ludwig interagiert live auf Deutsch und Englisch. Ideal für internationales Messe- und Konferenzpublikum.' },
   ];
@@ -599,6 +610,7 @@ function pricingPage() {
     { q: 'Gibt es versteckte Kosten?', a: 'Nein. Sie erhalten vorab ein individuelles Angebot mit Festpreis — Anreise, Logistik, Operator und Versicherung sind darin bereits berücksichtigt. Es kommt nichts Überraschendes dazu.' },
     { q: 'Lohnt sich der Kauf eines Roboters statt der Miete?', a: 'Für einzelne Events praktisch nie: Ein Unitree G1 kostet in der Anschaffung einen mittleren fünfstelligen Betrag — plus Software, Schulung, Wartung, Versicherung und ein Team für den sicheren Betrieb. Die Miete liefert das komplette Paket zum planbaren Preis pro Einsatz.' },
     { q: 'Wie erhalte ich ein Angebot?', a: 'Schildern Sie Event, Datum und Ort kurz über das Anfrageformular oder per E-Mail an info@robotollern.de — Sie erhalten zeitnah ein individuelles, verbindliches Angebot.' },
+    { q: 'Was kostet es, einen Unitree G1 zu mieten?', a: 'Die Unitree-G1-Miete beginnt bei Robotollern ab 2.500 € zzgl. USt. — als schlüsselfertige Full-Service-Miete mit Operator, Transport, Aufbau und Versicherung. Details auf der Seite Unitree G1 mieten.' },
   ];
   const jsonld = {
     '@context': 'https://schema.org',
@@ -998,12 +1010,13 @@ ${POSTS.map((p) => `- [${p.title}](${SITE}/blog/${p.slug}/)`).join('\n')}
 const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), pricingPage(), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
 for (const { path, html } of pages) {
   const file = join(ROOT, path, 'index.html');
+  const depth = path.split('/').filter(Boolean).length;
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, html);
+  writeFileSync(file, relativize(html, depth));
 }
 writeFileSync(join(ROOT, 'sitemap.xml'), sitemap());
 writeFileSync(join(ROOT, 'robots.txt'), ROBOTS);
 writeFileSync(join(ROOT, 'llms.txt'), LLMS_TXT);
 writeFileSync(join(ROOT, 'feed.xml'), rssFeed());
-writeFileSync(join(ROOT, '404.html'), notFoundPage());
+writeFileSync(join(ROOT, '404.html'), relativize(notFoundPage(), 0));
 console.log(`Generated ${pages.length} pages + sitemap.xml + robots.txt + llms.txt + feed.xml + 404.html`);

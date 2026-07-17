@@ -1,12 +1,23 @@
 # SEO — robotollern.de
 
-Stan po fazie 3 (2026-07-15). Co jest zrobione w kodzie i co trzeba zrobić
+Stan po fazie 4 (2026-07-17). Co jest zrobione w kodzie i co trzeba zrobić
 ręcznie poza repozytorium, żeby ruch i pozycje realnie urosły.
 
 ## Co jest zrobione (on-page / techniczne)
 
-- **62 podstrony SEO**: hub miast, 40 stron miast (DE/AT/CH), 9 stron usług,
-  strona cen `/preise/`, blog (hub + 10 artykułów), strona 404.
+- **66 podstron SEO**: hub miast, 40 stron miast (DE/AT/CH), 10 stron usług
+  (w tym `/roboter-festival/` — festyny, zamki, eventy historyczne — oraz
+  `/unitree-g1-mieten/` — komercyjna strona modelowa), strona cen
+  `/preise/`, blog (hub + 12 artykułów), strona 404.
+- **Frazy „Unitree G1 mieten"** (B2B, wysoka intencja): dedykowana strona
+  `/unitree-g1-mieten/` pokrywa warianty mieten/leihen/buchen, Messestand,
+  Kongress, Gala, Corporate Event, Marketing-Aktion, Preise/Kosten i „mit
+  Operator"; każda strona miasta ma FAQ „Kann man den Unitree G1 in X
+  mieten?" (long-tail lokalny), a copy używa zwrotów budujących zaufanie
+  w DACH: „Full-Service-Miete" i „schlüsselfertige Vermietung".
+- **Linki wewnętrzne relatywne**: generator emituje ścieżki względne
+  (poprawna głębokość per strona), więc serwis działa pod rootem domeny,
+  pod subpathem (preview GitHub Pages) i lokalnie.
 - **Meta komplet na każdej stronie**: title/description w limitach SERP,
   canonical, pełny Open Graph (z wymiarami i altem obrazka), Twitter Cards,
   `og:type=article` + daty publikacji dla wpisów blogowych.

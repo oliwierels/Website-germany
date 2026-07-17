@@ -471,4 +471,80 @@ export const POSTS = [
       { q: 'Lohnt sich der Einsatz auch außerhalb von Messen?', a: 'Ja — auf Konferenzen (Sponsoren-Sichtbarkeit), bei Launches und Eröffnungen (Laufkundschaft) und auf Firmenevents (Employer Branding und interner Content).' },
     ],
   },
+  {
+    slug: 'roboter-stadtfest-schlossfest',
+    title: 'Roboter auf Stadtfest, Schlossfest & Festival: Der Publikumsmagnet für Veranstalter',
+    metaDesc: 'Roboter-König auf Stadtfest, Schlossfest oder Festival: Warum der Kontrast aus Historie und Hightech Besucher zieht — Einsatzideen, Planung & Kosten für Veranstalter.',
+    date: '2026-07-16',
+    readMin: 7,
+    excerpt: 'Ein Roboter-König zwischen Fachwerk und Burgmauern? Genau dieser Kontrast macht ihn zum Publikumsmagneten. Einsatzideen, Planung und Kosten für Fest- und Festival-Veranstalter.',
+    html: `
+<p>Stadtfeste, Schlossfeste und Festivals konkurrieren jedes Jahr um dasselbe Publikum — und um denselben Moment: das eine Highlight, über das Besucher hinterher erzählen. 2026 gibt es dafür einen neuen Kandidaten, den garantiert noch kein Nachbarfest hatte: einen <strong>humanoiden Roboter-König</strong>. Warum der Kontrast aus Historie und Hightech so gut funktioniert und wie Veranstalter den Einsatz planen — der Überblick.</p>
+
+<h2>Warum ein Roboter ausgerechnet auf ein historisches Fest gehört</h2>
+<p>Auf den ersten Blick ein Stilbruch, auf den zweiten ein Geniestreich: <a href="/">Ludwig II. von Robotollern</a> tritt mit Krone und rotem Umhang als König auf — auf einem Schlossfest oder Mittelaltermarkt wirkt er wie ein Besuch aus der Zukunft des Königreichs. Genau dieser Bruch erzeugt die drei Dinge, die jedes Fest braucht:</p>
+<ul>
+<li><strong>Menschentrauben:</strong> Ein laufender, sprechender König-Roboter stoppt jeden Besucherstrom — und Menschen ziehen Menschen an.</li>
+<li><strong>Fotos und Clips:</strong> Das Motiv „Roboter-König vor Burgkulisse“ teilt sich von selbst — organische Reichweite für die nächste Ausgabe des Festes.</li>
+<li><strong>Gesprächsstoff:</strong> Vom Bierstand bis zur Lokalzeitung — der Auftritt liefert die Geschichte des Wochenendes.</li>
+</ul>
+
+<h2>Fünf Einsatzideen für Feste und Festivals</h2>
+<ol>
+<li><strong>Königliche Festeröffnung:</strong> Der Monarch eröffnet das Fest — Ansprache, Banddurchschnitt oder Kommentar zum Fassanstich, abgestimmt mit Bürgermeisterin oder Schirmherr.</li>
+<li><strong>Der Zeitreisende auf dem Mittelaltermarkt:</strong> Ludwig flaniert zwischen Ständen und Gauklern, gewährt Audienzen und urteilt königlich über Met und Spanferkel.</li>
+<li><strong>Stargast der Schloss- oder Museumsnacht:</strong> Feste Auftrittszeiten als Programmpunkte — planbare Besucherwellen für Innenhof oder Foyer.</li>
+<li><strong>Festival-Act zwischen den Bühnenslots:</strong> Während umgebaut wird, hält der König Hof — die Wartezeit wird zum Programm.</li>
+<li><strong>Stadtjubiläum mit lokalem Skript:</strong> Stadtwappen, Gründungssage, Anekdoten aus der Stadtgeschichte — der Auftritt wird auf den Anlass geschrieben.</li>
+</ol>
+
+<h2>Was Veranstalter für die Planung wissen müssen</h2>
+<p>Der Einsatz ist unkomplizierter, als viele erwarten: Benötigt werden eine ebene, feste Fläche, Strom und Internet (mobiles Netz genügt meist). Bei Open-Air-Festen wird eine überdachte Ausweichfläche für Regen eingeplant. Der Roboter wird durchgehend von einem geschulten Operator begleitet; Laufwege, Zeitfenster und Abstände werden mit dem Sicherheitskonzept des Festes abgestimmt — der Betrieb ist versichert. Details zur Planung: <a href="/blog/roboter-event-planen-checkliste/">die komplette Veranstalter-Checkliste</a>.</p>
+
+<h2>Was kostet der Auftritt?</h2>
+<p>Einsätze beginnen <strong>ab 2.500 € zzgl. USt.</strong> für ein kompaktes Format ab ca. zwei Stunden — inklusive Operator, Anreise, Aufbau und versichertem Betrieb. Ganztägige Festformate mit mehreren Auftrittsblöcken werden individuell kalkuliert. Alle Details auf der Seite <a href="/roboter-festival/">Roboter für Festivals &amp; historische Feste</a> und unter <a href="/preise/">Preise &amp; Pakete</a>.</p>
+
+<p>Ob <a href="/roboter-mieten/muenchen/">München</a>, <a href="/roboter-mieten/nuernberg/">Nürnberg</a> oder <a href="/roboter-mieten/wien/">Wien</a> — der König reist in der gesamten DACH-Region an. <a href="/#contact">Fragen Sie Ihren Festtermin an</a>, bevor es das Nachbarfest tut.</p>`,
+    faq: [
+      { q: 'Eignet sich ein Roboter-Auftritt für ein öffentliches Fest mit freiem Eintritt?', a: 'Ja — gerade dort. Der Ablauf wird mit dem Sicherheitskonzept des Festes abgestimmt (Laufwege, Zeitfenster, Abstände), der Operator begleitet durchgehend und der Betrieb ist versichert.' },
+      { q: 'Funktioniert der Roboter auch auf Kopfsteinpflaster oder Wiese?', a: 'Der Roboter braucht ebenen, festen Untergrund. Auf Festgeländen wird vorab eine geeignete Fläche festgelegt — Bühne, Platz oder befestigter Weg; grobes Kopfsteinpflaster und weiche Wiesen werden gemieden.' },
+      { q: 'Kann das Skript auf unsere Stadt oder unser Festmotto angepasst werden?', a: 'Ja — lokale Bezüge, Stadtgeschichte, Festmotto und Grußworte werden vorab ins Skript geschrieben. Je lokaler die Pointen, desto größer der Effekt.' },
+    ],
+  },
+  {
+    slug: 'roboter-open-air-events',
+    title: 'Roboter auf Open-Air-Events: Technik, Wetter & Sicherheit — der Veranstalter-Guide',
+    metaDesc: 'Humanoider Roboter unter freiem Himmel: Was bei Open-Air-Events zu Untergrund, Wetter, Strom, Internet und Sicherheit zu beachten ist — der praktische Guide.',
+    date: '2026-07-17',
+    readMin: 6,
+    excerpt: 'Festwiese, Schlosshof, Marktplatz: Was Veranstalter beachten müssen, damit ein humanoider Roboter open air sicher und wirkungsvoll auftritt — Untergrund, Wetter, Strom, Sicherheit.',
+    html: `
+<p>Drinnen ist der Auftritt eines humanoiden Roboters Routine — draußen wird er zum Ereignis: mehr Publikum, mehr Fotokulisse, mehr Wirkung. Damit der <strong>Open-Air-Einsatz</strong> genauso reibungslos läuft wie der Ballsaal-Auftritt, gibt es ein paar Punkte, die Veranstalter vorab klären sollten. Der praktische Guide.</p>
+
+<h2>Der Untergrund: die wichtigste Frage zuerst</h2>
+<p>Ein humanoider Roboter wie der <a href="/blog/unitree-g1-event-einsatz/">Unitree G1</a> läuft souverän — auf ebenem, festem Untergrund. Ideal sind Bühnen, gepflasterte Plätze mit feinem Belag, Asphalt oder verlegte Bodenplatten. Kritisch sind grobes Kopfsteinpflaster, Schotter, weiche Wiesen und Steigungen. Die Lösung ist einfach: Die Auftrittsfläche wird vorab festgelegt — oft genügen wenige Quadratmeter, etwa vor der Bühne oder am Eingangsbereich.</p>
+
+<h2>Wetter: Sonne ja, Regen nein</h2>
+<p>Elektronik und Regen bleiben getrennte Welten: Bei Nässe tritt der Roboter nicht im Freien auf. Professionelle Anbieter planen deshalb immer eine <strong>überdachte Ausweichfläche</strong> ein — Zelt, Pavillon, Bühnenüberdachung oder der Umzug ins Festzelt. Hitze ist unkritischer: Direkte pralle Sonne über Stunden wird durch Standortwahl und Aktivphasen-Planung entschärft.</p>
+
+<h2>Strom und Internet auf dem Festgelände</h2>
+<ul>
+<li><strong>Strom:</strong> Eine normale Steckdose (230 V) in erreichbarer Nähe genügt — für Akkuwechsel und Technik. Generator-Strom ist nach Absprache möglich.</li>
+<li><strong>Internet:</strong> Meist reicht das Mobilfunknetz. Bei Großveranstaltungen mit überlasteten Zellen ist ein dediziertes WLAN oder ein separater Hotspot die sichere Wahl.</li>
+<li><strong>Rückzugsraum:</strong> Ein kleiner trockener Bereich (Zelt, Container, Backstage) für Vorbereitung und Akkuwechsel.</li>
+</ul>
+
+<h2>Sicherheit bei großem Publikum</h2>
+<p>Open-Air heißt: offenes Publikum, Kinder, Hunde, Gedränge. Deshalb gilt: Der Operator begleitet den Roboter durchgehend, Laufwege und Zeitfenster werden mit dem Sicherheitskonzept des Veranstalters abgestimmt, und um den Roboter bleibt ein moderierter Interaktionsbereich. Der Betrieb ist versichert — das überzeugt auch Ordnungsamt und Veranstaltungsleitung. Mehr zur Gesamtplanung: <a href="/blog/roboter-event-planen-checkliste/">die Veranstalter-Checkliste</a>.</p>
+
+<h2>Wo Open-Air-Auftritte am besten wirken</h2>
+<p>Stadt- und Schützenfeste, <a href="/roboter-festival/">Schloss- und Burgfeste</a>, Marktplätze bei Eröffnungen, Festival-Gelände zwischen den Slots, Fußgängerzonen beim <a href="/roboter-produktlaunch/">Guerilla-Launch</a> — überall dort, wo Laufpublikum auf freie Sicht trifft. Faustregel: Je überraschender der Kontext, desto größer die Menschentraube.</p>
+
+<p>Einsätze ab 2.500 € zzgl. USt. — inklusive Operator, Anreise und versichertem Betrieb, in ganz Deutschland, Österreich und der Schweiz. <a href="/#contact">Jetzt Termin anfragen</a> und das Wetter dem König überlassen.</p>`,
+    faq: [
+      { q: 'Tritt der Roboter auch bei Regen auf?', a: 'Nicht im Freien — bei Nässe wechselt der Auftritt auf die vorab eingeplante überdachte Ausweichfläche (Zelt, Pavillon, Festzelt oder Innenbereich). So findet der Auftritt bei jedem Wetter statt.' },
+      { q: 'Welchen Untergrund braucht der Roboter?', a: 'Eben und fest: Bühne, Asphalt, feiner Pflasterbelag oder Bodenplatten. Grobes Kopfsteinpflaster, Schotter und weiche Wiesen werden gemieden — die Auftrittsfläche wird vorab gemeinsam festgelegt.' },
+      { q: 'Reicht das Mobilfunknetz für den Betrieb?', a: 'In den meisten Fällen ja. Bei Großveranstaltungen mit überlasteten Funkzellen empfiehlt sich ein dediziertes WLAN oder ein separater Hotspot — das wird bei der technischen Abstimmung geklärt.' },
+    ],
+  },
 ];
