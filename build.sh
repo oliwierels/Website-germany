@@ -75,7 +75,15 @@ cat >> "$OUT" <<'HTML_MID'
 </head>
 <body>
 <a href="#main" class="skip-link">Zum Inhalt springen</a>
-<div id="app"></div>
+<div id="app">
+HTML_MID
+
+# --- SEO: statisch vorgerenderter Inhalt für Crawler (app.js ersetzt ihn
+#     beim Boot durch die interaktive Version) ---
+cat seo-prerender.html >> "$OUT"
+
+cat >> "$OUT" <<'HTML_MID'
+</div>
 <noscript>
   <div style="max-width:720px;margin:80px auto;padding:0 24px;font-family:Georgia,serif;color:#C9C9C2;line-height:1.6">
     <h1 style="color:#F5F5F0">Ludwig II. von Robotollern</h1>
