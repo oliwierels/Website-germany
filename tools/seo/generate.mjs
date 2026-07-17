@@ -20,7 +20,16 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SITE = 'https://robotollern.de';
 const BRAND = 'Ludwig II. von Robotollern';
 const EMAIL = 'info@robotollern.de';
-const TODAY = '2026-07-15';
+const TODAY = '2026-07-17';
+
+/* Interne Links werden als Root-absolute Pfade ("/roboter-mieten/…") in den
+   Templates geschrieben und beim Schreiben tiefen-korrekt relativiert —
+   so funktioniert die Seite unter der Domain-Root, unter einem Unterpfad
+   (GitHub-Pages-Preview) und in lokalen Previews gleichermaßen. */
+function relativize(html, depth) {
+  const prefix = depth ? '../'.repeat(depth) : './';
+  return html.replace(/\b(href|src)="\/([^"/][^"]*|)"/g, (m, attr, rest) => `${attr}="${prefix}${rest}"`);
+}
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const cityBySlug = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
@@ -70,7 +79,7 @@ function footer() {
       </div>
       <div>
         <h4>Leistungen</h4>
-        <ul>${USECASES.slice(0, 6).map((u) => `<li><a href="/${u.slug}/">${esc(u.kicker)}</a></li>`).join('')}</ul>
+        <ul>${[...USECASES.slice(0, 6), ...USECASES.filter((u) => u.slug === 'roboter-festival')].map((u) => `<li><a href="/${u.slug}/">${esc(u.kicker)}</a></li>`).join('')}</ul>
       </div>
       <div>
         <h4>Service</h4>
@@ -998,12 +1007,13 @@ ${POSTS.map((p) => `- [${p.title}](${SITE}/blog/${p.slug}/)`).join('\n')}
 const pages = [hubPage(), ...CITIES.map(cityPage), ...USECASES.map(usecasePage), pricingPage(), blogHub(), ...POSTS.map((p) => postPage(p, POSTS))];
 for (const { path, html } of pages) {
   const file = join(ROOT, path, 'index.html');
+  const depth = path.split('/').filter(Boolean).length;
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, html);
+  writeFileSync(file, relativize(html, depth));
 }
 writeFileSync(join(ROOT, 'sitemap.xml'), sitemap());
 writeFileSync(join(ROOT, 'robots.txt'), ROBOTS);
 writeFileSync(join(ROOT, 'llms.txt'), LLMS_TXT);
 writeFileSync(join(ROOT, 'feed.xml'), rssFeed());
-writeFileSync(join(ROOT, '404.html'), notFoundPage());
+writeFileSync(join(ROOT, '404.html'), relativize(notFoundPage(), 0));
 console.log(`Generated ${pages.length} pages + sitemap.xml + robots.txt + llms.txt + feed.xml + 404.html`);

@@ -197,4 +197,28 @@ export const USECASES = [
     ],
     relatedPosts: ['roboter-vs-klassische-showacts', 'unitree-g1-event-einsatz', 'event-roboter-ideen-konferenzen'],
   },
+  {
+    slug: 'roboter-festival',
+    kicker: 'Festivals & historische Feste',
+    h1: ['Ein König kehrt zurück — der ', 'Roboter-Monarch', ' für Ihr Fest'],
+    title: 'Roboter für Festivals, Schlossfeste & historische Events mieten',
+    metaDesc: 'Roboter-König für Festivals, Stadtfeste, Schloss- & Burgfeste und historische Events: Ludwig II. — humanoider Roboter mit Krone, Umhang & Operator. Ab 2.500 € zzgl. USt.',
+    intro: 'Wo passt ein königlicher Roboter besser hin als auf ein Schlossfest? Ludwig II. von Robotollern — humanoider Roboter mit Krone und rotem Umhang — begrüßt Besucher auf Festivals, Stadtfesten, Burg- und Schlossfesten, Mittelaltermärkten und historischen Jubiläen. Der Kontrast aus Historie und Hightech ist der Publikumsmagnet, über den Ihr Fest noch Wochen später spricht.',
+    benefits: [
+      { t: 'Der Kontrast, der Geschichte schreibt', d: 'Ein Roboter-König zwischen Fachwerk, Burgmauern und Gauklern — genau dieser Bruch macht den Auftritt unvergesslich und die Fotos viral.' },
+      { t: 'Besuchermagnet für Ihr Festgelände', d: 'Ludwig zieht Menschentrauben an, lenkt Besucherströme zu Bühne, Stand oder Sponsorfläche und liefert den Programmpunkt, den es sonst nirgendwo gibt.' },
+      { t: 'Königliche Eröffnung & Grußworte', d: 'Festeröffnung, Ansprache vom Balkon, Band-Durchschneiden oder Fassanstich-Kommentar — der Monarch übernimmt das Zeremonielle mit Witz.' },
+      { t: 'Foto- & Content-Momente ohne Ende', d: 'Meet & Greet mit dem König: Jedes Selfie trägt Ihr Fest in die sozialen Netzwerke — organische Reichweite statt Anzeigenbudget.' },
+      { t: 'Open-Air-tauglich', d: 'Schlosshof, Festwiese, Marktplatz oder Museumsnacht: Bei trockenem Wetter und ebenem Untergrund tritt Ludwig auch unter freiem Himmel auf.' },
+      { t: 'Immer betreut, immer sicher', d: 'Operator, abgestimmtes Sicherheitskonzept und Versicherung — auch bei großem Publikumsandrang bleibt alles unter Kontrolle.' },
+    ],
+    body: 'Der Auftritt wird auf Ihr Fest zugeschnitten: als königliche Eröffnung eines Stadt- oder Schützenfestes, als „Zeitreisender“ auf dem Mittelaltermarkt, als Stargast der Museums- oder Schlossnacht, beim historischen Stadtjubiläum oder als Festival-Act zwischen den Bühnenslots. Auf Wunsch mit lokalem Bezug im Skript — vom Stadtwappen bis zur Gründungssage. Deutschlandweit sowie in Österreich und der Schweiz, ab 2.500 € zzgl. USt.',
+    faq: [
+      { q: 'Passt ein Roboter überhaupt zu einem historischen Fest?', a: 'Gerade deshalb funktioniert er: Ludwig II. tritt mit Krone und rotem Umhang als König auf — der Kontrast aus Historie und Hightech ist der Fotomoment des Festes. Auf Schloss- und Mittelalterfesten wird der Auftritt gern als „Besuch aus der Zukunft des Königreichs“ inszeniert.' },
+      { q: 'Funktioniert der Einsatz im Freien — auf Festwiese, Schlosshof oder Marktplatz?', a: 'Ja, bei trockenem Wetter und auf ebenem, festem Untergrund. Benötigt werden Strom und Internet (mobiles Netz genügt meist); für Regen wird eine überdachte Ausweichfläche eingeplant.' },
+      { q: 'Wie läuft der Auftritt bei großem Publikumsandrang ab?', a: 'Der Operator begleitet Ludwig durchgehend, der Ablauf wird mit dem Veranstalter und dem Sicherheitskonzept des Festes abgestimmt — inklusive Laufwegen, Zeitfenstern und ausreichend Abstand. Der Betrieb ist versichert.' },
+      { q: 'Kann der Auftritt thematisch an unser Fest angepasst werden?', a: 'Unbedingt: Ansprachen im königlichen Ton, lokale Bezüge, Grußworte zur Eröffnung, Schlagfertigkeit zum Festmotto — das Skript wird auf Ihr Fest geschrieben, auf Wunsch auch zweisprachig (Deutsch/Englisch).' },
+    ],
+    relatedPosts: ['roboter-stadtfest-schlossfest', 'roboter-open-air-events', 'roboter-vs-klassische-showacts'],
+  },
 ];
